@@ -125,7 +125,7 @@
         <h3 class="text-lg font-semibold mb-4">相关工具</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <NuxtLink
-            to="/tools/text/text-replace"
+            to="/tools/text-replace"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <FileText class="w-5 h-5 text-primary" />
@@ -136,7 +136,7 @@
             <ArrowRight class="w-4 h-4 ml-auto text-muted-foreground group-hover:text-primary" />
           </NuxtLink>
           <NuxtLink
-            to="/tools/text/text-counter"
+            to="/tools/text-counter"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <FileText class="w-5 h-5 text-primary" />
@@ -147,7 +147,7 @@
             <ArrowRight class="w-4 h-4 ml-auto text-muted-foreground group-hover:text-primary" />
           </NuxtLink>
           <NuxtLink
-            to="/tools/text/markdown-editor"
+            to="/tools/markdown-editor"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <FileText class="w-5 h-5 text-primary" />

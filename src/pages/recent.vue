@@ -83,7 +83,7 @@ import { useSEO } from '~/composables/useSEO'
 
 // 使用SEO composable设置页面标题
 const { setPageTitle } = useSEO()
-setPageTitle('最近使用工具')
+setPageTitle('最近使用')
 
 
 // 初始化工具数据

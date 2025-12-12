@@ -269,7 +269,7 @@
             <ArrowRight class="w-4 h-4 ml-auto text-muted-foreground group-hover:text-primary" />
           </NuxtLink>
           <NuxtLink
-            to="/tools/timestamp-converter"
+            to="/tools/timestamp-convert"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <Clock class="w-5 h-5 text-primary" />
@@ -280,7 +280,7 @@
             <ArrowRight class="w-4 h-4 ml-auto text-muted-foreground group-hover:text-primary" />
           </NuxtLink>
           <NuxtLink
-            to="/tools/pace-calculator"
+            to="/tools/date-calculator"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <TrendingUp class="w-5 h-5 text-primary" />
@@ -476,7 +476,13 @@ const exportData = () => {
 
 // 分享结果
 const shareResults = async () => {
-  const text = `秒表计时结果\n总计: ${formatTime(elapsedTime)}\n计次数: ${laps.length}\n${laps.length > 0 ? `\n最快: ${formatTime(stats.value.fastest)}\n最慢: ${formatTime(stats.value.slowest)}\n平均: ${formatTime(stats.value.average)}` : ''}`
+  const text = `秒表计时结果
+总计: ${formatTime(elapsedTime)}
+计次数: ${laps.length}
+${laps.length > 0 ? `
+最快: ${formatTime(stats.value.fastest)}
+最慢: ${formatTime(stats.value.slowest)}
+平均: ${formatTime(stats.value.average)}` : ''}`
 
   try {
     if (navigator.share) {

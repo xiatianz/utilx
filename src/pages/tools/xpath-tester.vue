@@ -345,7 +345,7 @@
         <h3 class="text-lg font-semibold mb-4">相关工具</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <NuxtLink
-            to="/tools/format/xml-formatter"
+            to="/tools/xml-formatter"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <FileText class="w-5 h-5 text-primary" />
@@ -356,7 +356,7 @@
             <ArrowRight class="w-4 h-4 ml-auto text-muted-foreground group-hover:text-primary" />
           </NuxtLink>
           <NuxtLink
-            to="/tools/format/xml-to-json"
+            to="/tools/xml-to-json"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <FileJson class="w-5 h-5 text-primary" />
@@ -367,7 +367,7 @@
             <ArrowRight class="w-4 h-4 ml-auto text-muted-foreground group-hover:text-primary" />
           </NuxtLink>
           <NuxtLink
-            to="/tools/text/json-path"
+            to="/tools/json-path"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <FileJson class="w-5 h-5 text-primary" />

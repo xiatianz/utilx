@@ -788,6 +788,12 @@ const formatJson = () => {
 
 // 解析 JSON
 const parseJson = () => {
+  // 如果输入为空，直接设置为 null
+  if (!jsonInput.value.trim()) {
+    parsedJson.value = null
+    return
+  }
+  
   try {
     parsedJson.value = JSON.parse(jsonInput.value)
   } catch (error) {

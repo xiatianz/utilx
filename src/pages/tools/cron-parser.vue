@@ -231,7 +231,7 @@
         <h3 class="text-lg font-semibold mb-4">相关工具</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <NuxtLink
-            to="/tools/timestamp-converter"
+            to="/tools/timestamp-convert"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <Clock class="w-5 h-5 text-primary" />
@@ -253,7 +253,7 @@
             <ArrowRight class="w-4 h-4 ml-auto text-muted-foreground group-hover:text-primary" />
           </NuxtLink>
           <NuxtLink
-            to="/tools/timezone-converter"
+            to="/tools/timezone-convert"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <Globe class="w-5 h-5 text-primary" />

@@ -173,7 +173,7 @@
       </div>
 
       <!-- 编辑器和预览区 -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-t-0 rounded-b-lg">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 border border-t-0 rounded-b-lg min-h-[500px] h-[70vh]">
         <!-- 编辑器 -->
         <div class="relative">
           <textarea

@@ -569,7 +569,7 @@
             <ArrowRight class="w-4 h-4 ml-auto text-muted-foreground group-hover:text-primary" />
           </NuxtLink>
           <NuxtLink
-            to="/tools/css-format"
+            to="/tools/css-formatter"
             class="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors group"
           >
             <FileText class="w-5 h-5 text-primary" />

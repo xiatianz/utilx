@@ -11,7 +11,7 @@
     <!-- 侧边栏 -->
     <aside 
       id="sidebar"
-      class="fixed inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border transform transition-all duration-300 h-full lg:static lg:flex flex-col"
+      class="fixed inset-y-0 left-0 z-50 w-42 bg-sidebar border-r border-sidebar-border transform transition-all duration-300 h-full lg:static lg:flex flex-col"
       :class="{ 
         '-translate-x-full': !isSidebarOpen, 
         'translate-x-0': isSidebarOpen,
@@ -135,10 +135,10 @@
             <span class="hidden sm:inline">Star</span>
           </a>
 
-          <!-- 多语言切换 -->
-          <button class="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50">
+          <!-- 多语言切换, 暂时注释，待后续开发 -->
+          <!-- <button class="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50">
             <Languages class="w-5 h-5" />
-          </button>
+          </button> -->
 
           <!-- 主题切换 -->
           <button
@@ -192,9 +192,6 @@
 
     <!-- PWA 安装提示 -->
     <PWAInstallPrompt />
-
-    <!-- 全局头部脚本区域 -->
-    <div v-if="siteConfig.customHeadScripts" v-html="siteConfig.customHeadScripts" class="hidden"></div>
   </div>
 
   
