@@ -1,0 +1,532 @@
+<template>
+  <div class="bg-background text-foreground h-screen overflow-hidden flex antialiased selection:bg-primary/30">
+    <!-- 移动端遮罩 (点击关闭侧边栏) -->
+    <div 
+      id="mobileOverlay" 
+      class="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm transition-opacity lg:hidden"
+      :class="{ 'hidden': !isSidebarOpen }"
+      @click="toggleSidebar"
+    ></div>
+
+    <!-- 侧边栏 -->
+    <aside 
+      id="sidebar"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-sidebar border-r border-sidebar-border transform transition-all duration-300 h-full lg:static lg:flex flex-col"
+      :class="{ 
+        '-translate-x-full': !isSidebarOpen, 
+        'translate-x-0': isSidebarOpen,
+        'lg:translate-x-0': true,
+        'lg:w-20': isCollapsed 
+      }"
+    >
+      <Sidebar 
+        :collapsed="isCollapsed"
+        :current-category="currentCategory"
+        @category-change="handleCategoryChange"
+        @search="$emit('search', $event)"
+      />
+      <!-- 伸缩按钮 -->
+      <button 
+        class="hidden lg:flex absolute right-0 top-8 transform translate-x-1/2 -translate-y-1/2 z-40 w-6 h-6 rounded-full bg-sidebar border border-sidebar-border items-center justify-center text-muted-foreground hover:text-primary transition-all duration-300"
+        @click="toggleCollapse"
+      >
+        <ChevronLeft 
+          class="w-4 h-4 transition-transform" 
+          :class="{ 'rotate-180': isCollapsed }" 
+        />
+      </button>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-background relative">
+      <!-- 桌面端 Header -->
+      <header class="hidden lg:flex h-16 border-b border-border items-center justify-between px-6 bg-background/80 backdrop-blur z-30">
+        <!-- 左侧：面包屑导航 -->
+        <div class="flex items-center" style="width: 280px;">
+          <Breadcrumb v-if="showBreadcrumbs" />
+        </div>
+
+        <!-- 中间：智能搜索中枢 -->
+        <div class="flex-1 flex items-center justify-center">
+          <div
+            @click="openSearch"
+            class="w-80 flex items-center gap-2 px-3 py-1.5 bg-muted/30 hover:bg-muted/50 border border-border/50 rounded-lg text-sm text-muted-foreground cursor-pointer transition-all duration-200 group"
+          >
+            <!-- 搜索文本 -->
+            <div class="flex items-center flex-1 justify-center gap-1">
+              <span class="font-mono text-muted-foreground/70 group-hover:text-muted-foreground">Press</span>
+              <kbd class="px-1.5 py-0.5 text-xs bg-background border border-border/50 rounded font-mono group-hover:bg-background/90 transition-colors">⌘</kbd>
+              <span class="text-muted-foreground/70 group-hover:text-muted-foreground">+</span>
+              <kbd class="px-1.5 py-0.5 text-xs bg-background border border-border/50 rounded font-mono group-hover:bg-background/90 transition-colors">K</kbd>
+              <span class="text-muted-foreground/50 group-hover:text-muted-foreground">to search</span>
+            </div>
+
+            <!-- 搜索图标 -->
+            <Search class="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0" />
+
+            <!-- 脉动动画指示器 -->
+            <div class="w-1 h-1 bg-primary/30 group-hover:bg-primary/50 rounded-full transition-all duration-300"></div>
+          </div>
+        </div>
+
+        <!-- 右侧：功能图标区 -->
+        <div class="flex items-center gap-2">
+          <!-- 小工具模块 -->
+          <div class="hidden lg:flex items-center px-3 py-1.5 bg-muted/50 rounded-md border border-border/50 relative overflow-hidden transition-all duration-300" style="height: 32px; min-width: 280px;">
+            <!-- 显示内容区域 -->
+            <div class="absolute left-3 top-0 right-20 flex flex-col transition-transform duration-300 ease-in-out" :style="{ transform: `translateY(-${currentWidget * 32}px)` }">
+              <!-- 0: IP地址 -->
+              <div class="flex items-center gap-2 h-8 whitespace-nowrap">
+                <Globe class="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                      <span class="text-sm font-mono text-muted-foreground flex-1" style="max-width: 140px;">IP: {{ userIP }}</span>
+              </div>
+              <!-- 1: 时间戳 -->
+              <div class="flex items-center gap-2 h-8 whitespace-nowrap">
+                <Clock class="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                      <span class="text-sm font-mono text-muted-foreground flex-1" style="max-width: 140px;">{{ currentTime }}</span>
+              </div>
+
+              <!-- 2: 文字tips -->
+              <div class="flex items-center gap-2 h-8 whitespace-nowrap">
+                <Sparkles class="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                      <span class="text-sm text-muted-foreground flex-1" style="max-width: 140px;">为效率而生, Just Util.cn</span>
+              </div>
+            </div>
+
+            <!-- 竖线分割 -->
+            <div class="absolute right-16 top-1/2 transform -translate-y-1/2 w-px h-4 bg-muted-foreground/30"></div>
+
+            <!-- 右侧控制按钮组 -->
+            <div class="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1.5 z-10">
+              <!-- 复制按钮 -->
+              <button
+                @click="copyWidgetContent"
+                class="p-1 text-muted-foreground hover:text-foreground hover:bg-muted/80 rounded transition-all duration-200 relative group"
+                :title="copySuccess ? '已复制!' : '点击复制当前内容'"
+              >
+                <Check v-if="copySuccess" class="w-3 h-3 text-green-500" />
+                <Copy v-else class="w-3 h-3" />
+                <!-- Tooltip -->
+                <div v-if="copySuccess" class="absolute -top-8 right-0 bg-green-500 text-white text-xs px-2 py-1 rounded whitespace-nowrap animate-fade-in shadow-lg">
+                  已复制!
+                </div>
+                <div v-else class="absolute -top-8 right-0 bg-gray-700 text-white text-xs px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
+                  点击复制
+                </div>
+              </button>
+
+              <!-- 刷新切换按钮 -->
+              <button
+                @click="switchWidget(1)"
+                class="p-1 text-muted-foreground hover:text-foreground hover:bg-muted/80 rounded transition-all duration-200"
+                title="切换显示"
+              >
+                <RefreshCw class="w-3 h-3" />
+              </button>
+            </div>
+          </div>
+          <!-- GitHub -->
+          <a
+            href="https://github.com/dmdq/utilx"
+            target="_blank"
+            class="group flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors"
+          >
+            <Github class="w-4 h-4" />
+            <span class="hidden sm:inline">Star</span>
+          </a>
+
+          <!-- 多语言切换 -->
+          <button class="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50">
+            <Languages class="w-5 h-5" />
+          </button>
+
+          <!-- 主题切换 -->
+          <button
+            class="p-2 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50"
+            @click="toggleTheme"
+          >
+            <Sun
+              class="w-5 h-5 hidden dark:block"
+            />
+            <Moon
+              class="w-5 h-5 block dark:hidden"
+            />
+          </button>
+        </div>
+      </header>
+
+      <!-- 移动端 Header -->
+      <header class="lg:hidden h-14 border-b border-border flex items-center justify-between px-4 bg-background/80 backdrop-blur z-30">
+        <div class="flex items-center gap-3">
+          <button
+            id="menuBtn"
+            class="p-2 -ml-2 text-muted-foreground hover:text-foreground"
+            @click="toggleSidebar"
+          >
+            <Menu class="w-6 h-6" />
+          </button>
+          <span class="font-bold">Util.cn</span>
+        </div>
+        <button class="p-2 text-muted-foreground" @click="openSearch">
+          <Search class="w-5 h-5" />
+        </button>
+      </header>
+
+      <!-- 内容滚动容器 -->
+      <div class="flex-1 overflow-y-auto overflow-x-hidden p-4 lg:p-8 scroll-smooth" id="scrollContainer">
+        <div class="min-h-full flex flex-col">
+          <div class="flex-auto">
+            <slot />
+          </div>
+          <Footer />
+        </div>
+      </div>
+
+      <!-- 全局底部脚本区域 -->
+      <div v-if="siteConfig.customFooterScripts" v-html="siteConfig.customFooterScripts"></div>
+
+    </main>
+
+    <!-- 全局搜索弹窗 -->
+    <GlobalSearch v-model="isSearchOpen" />
+
+    <!-- PWA 安装提示 -->
+    <PWAInstallPrompt />
+
+    <!-- 全局头部脚本区域 -->
+    <div v-if="siteConfig.customHeadScripts" v-html="siteConfig.customHeadScripts" class="hidden"></div>
+  </div>
+
+  
+  
+</template>
+
+<script setup>
+import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { Menu, Search, ChevronLeft, Languages, Sun, Moon, Sparkles, Github, Globe, RefreshCw, Clock, Copy, Check } from 'lucide-vue-next'
+import Sidebar from '~/components/Sidebar.vue'
+import Footer from '~/components/Footer.vue'
+import GlobalSearch from '~/components/GlobalSearch.vue'
+import Breadcrumb from '~/components/Breadcrumb.vue'
+import PWAInstallPrompt from '~/components/PWAInstallPrompt.vue'
+import { siteConfig } from '~/config/site'
+import { categories } from '~/data/categories'
+import { tools } from '~/data/tools'
+
+const router = useRouter()
+const route = useRoute()
+
+defineEmits(['search'])
+
+const isSidebarOpen = ref(false)
+const isCollapsed = ref(false)
+const currentCategory = ref('all')
+const isSearchOpen = ref(false)
+const userIP = ref('获取中...')
+const currentWidget = ref(0) // 0: IP地址, 1: 时间戳, 2: 文字tips
+const currentTime = ref('')
+const copySuccess = ref(false) // 复制成功状态
+
+// 计算当前分类名称
+const currentCategoryName = computed(() => {
+  if (currentCategory.value === 'all') return ''
+  const category = categories.find(c => c.id === currentCategory.value)
+  return category ? category.name : ''
+})
+
+// 计算当前工具名称
+const currentToolName = computed(() => {
+  // 检查是否是静态页面（about, privacy, terms, cookie等）
+  const staticPages = {
+    '/about': '关于我们',
+    '/privacy': '隐私政策',
+    '/terms': '服务条款',
+    '/cookie': 'Cookie政策'
+  }
+
+  // 检查是否是特殊页面
+  const specialPages = {
+    '/all': '全部工具',
+    '/explore': '工具探索',
+    '/favorites': '我的收藏',
+    '/recent': '最近使用',
+    '/feedback': '提交反馈',
+    '/cookie': 'Cookie政策',
+    '/faq': '常见问题',
+    '/sitemap': '站点地图'
+  }
+
+  if (route && staticPages[route.path]) {
+    return staticPages[route.path]
+  }
+
+  if (route && specialPages[route.path]) {
+    return specialPages[route.path]
+  }
+
+  // 从路由中提取工具ID
+  if (route) {
+    const pathParts = route.path.split('/').filter(part => part)
+    if (pathParts.length > 1) {
+      const toolId = pathParts[1]
+      const tool = tools.find(t => t.id === toolId)
+      return tool ? tool.name : ''
+    }
+  }
+  return ''
+})
+
+// 计算页面标题（用于面包屑）
+const pageTitle = computed(() => {
+  // 如果路由元数据中有标题，使用它
+  if (route && route.meta && route.meta.title) {
+    return route.meta.title
+  }
+
+  // 检查是否是静态页面
+  const staticPages = {
+    '/about': '关于我们',
+    '/privacy': '隐私政策',
+    '/terms': '服务条款',
+    '/cookie': 'Cookie政策'
+  }
+
+  // 检查是否是特殊页面
+  const specialPages = {
+    '/all': '全部工具',
+    '/explore': '工具探索',
+    '/favorites': '我的收藏',
+    '/recent': '最近使用',
+    '/feedback': '提交反馈',
+    '/cookie': 'Cookie政策',
+    '/faq': '常见问题',
+    '/sitemap': '站点地图'
+  }
+
+  if (route && staticPages[route.path]) {
+    return staticPages[route.path]
+  }
+
+  if (route && specialPages[route.path]) {
+    return specialPages[route.path]
+  }
+
+  return ''
+})
+
+// 是否显示面包屑导航
+const showBreadcrumbs = computed(() => {
+  // 首页不显示面包屑
+  if (route && route.path === '/') return false
+
+  // 检查是否是分类页面
+  const categoryPages = ['/ai', '/crypto', '/dev', '/encode', '/format', '/image', '/network', '/text', '/time', '/all', '/sitemap']
+
+  // 如果是分类页面或有分类名称或工具名称或页面标题，则显示面包屑
+  return categoryPages.includes(route.path) || currentCategoryName.value !== '' || currentToolName.value !== '' || pageTitle.value !== ''
+})
+
+// 监听路由变化来更新当前分类
+watch(
+  () => route.path,
+  (newPath) => {
+    // 从路由路径中提取分类
+    const pathParts = newPath.split('/').filter(part => part)
+    if (pathParts.length > 0) {
+      currentCategory.value = pathParts[0]
+    } else {
+      currentCategory.value = 'all'
+    }
+  },
+  { immediate: true }
+)
+
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value
+}
+
+const toggleCollapse = () => {
+  isCollapsed.value = !isCollapsed.value
+}
+
+const toggleTheme = () => {
+  const isDark = document.documentElement.classList.toggle('dark')
+  // 保存用户偏好到localStorage
+  localStorage.setItem('theme', isDark ? 'dark' : 'light')
+}
+
+const openSearch = () => {
+  isSearchOpen.value = true
+}
+
+const handleCategoryChange = (category) => {
+  currentCategory.value = category
+  
+  // 如果不是'all'分类，则跳转到对应分类页面
+  if (category !== 'all') {
+    router.push(`/${category}`)
+  } else {
+    router.push('/all')
+  }
+  
+  // 在移动端设备上，路由跳转后关闭侧边栏
+  if (window.innerWidth < 1024) {
+    isSidebarOpen.value = false
+  }
+}
+
+// 切换小工具
+const switchWidget = (direction) => {
+  const totalWidgets = 3
+  currentWidget.value = (currentWidget.value + direction + totalWidgets) % totalWidgets
+}
+
+// 复制当前小工具内容
+const copyWidgetContent = async () => {
+  let contentToCopy = ''
+
+  switch (currentWidget.value) {
+    case 0: // IP地址
+      contentToCopy = userIP.value
+      break
+    case 1: // 时间戳
+      contentToCopy = currentTime.value
+      break
+    case 2: // 文字tips
+      contentToCopy = '为效率而生, Just Util.cn'
+      break
+  }
+
+  try {
+    await navigator.clipboard.writeText(contentToCopy)
+    copySuccess.value = true
+    setTimeout(() => {
+      copySuccess.value = false
+    }, 2000)
+  } catch (err) {
+    console.error('复制失败:', err)
+  }
+}
+
+// 更新时间戳
+const updateCurrentTime = () => {
+  const now = new Date()
+  const timestamp = now.getTime()
+  const dateStr = now.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+  // currentTime.value = `${dateStr} | ${timestamp}`
+  currentTime.value = `${dateStr}`
+}
+
+// 获取用户IP地址
+const fetchUserIP = async () => {
+  try {
+    // 使用多个IP服务作为备选
+    const ipServices = [
+      'https://api.ipify.org?format=json',
+      'https://ipapi.co/json/',
+      'https://api.ip.sb/ip',
+      'https://ifconfig.me/ip'
+    ]
+
+    // 先尝试从 localStorage 获取缓存的IP（缓存1小时）
+    const cachedIP = localStorage.getItem('userIP')
+    const cachedTime = localStorage.getItem('userIPTimestamp')
+    if (cachedIP && cachedTime) {
+      const timeDiff = Date.now() - parseInt(cachedTime)
+      // 如果缓存时间小于1小时，直接使用缓存的IP
+      if (timeDiff < 3600000) {
+        userIP.value = cachedIP
+        return
+      }
+    }
+
+    // 尝试获取新的IP地址
+    for (const service of ipServices) {
+      try {
+        const response = await fetch(service)
+        if (response.ok) {
+          let ip
+          if (service.includes('ipify.org')) {
+            const data = await response.json()
+            ip = data.ip
+          } else if (service.includes('ipapi.co')) {
+            const data = await response.json()
+            ip = data.ip
+          } else {
+            ip = await response.text()
+          }
+
+          if (ip && ip.trim()) {
+            userIP.value = ip.trim()
+            // 缓存IP地址
+            localStorage.setItem('userIP', ip.trim())
+            localStorage.setItem('userIPTimestamp', Date.now().toString())
+            return
+          }
+        }
+      } catch (e) {
+        console.warn(`Failed to fetch IP from ${service}:`, e)
+        continue
+      }
+    }
+
+    // 如果所有服务都失败，使用缓存的IP或显示错误
+    const fallbackIP = localStorage.getItem('userIP')
+    userIP.value = fallbackIP || '未知'
+  } catch (error) {
+    console.error('Failed to fetch user IP:', error)
+    userIP.value = '未知'
+  }
+}
+
+// 在组件挂载时初始化
+onMounted(() => {
+  // 获取用户IP
+  fetchUserIP()
+
+  // 初始化并更新时间
+  updateCurrentTime()
+  const timeInterval = setInterval(updateCurrentTime, 1000)
+
+  // 检查并应用保存的主题
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme === 'dark') {
+    document.documentElement.classList.add('dark')
+  } else if (savedTheme === 'light') {
+    document.documentElement.classList.remove('dark')
+  } else {
+    // 如果没有保存的主题设置，默认使用暗色主题
+    document.documentElement.classList.add('dark')
+  }
+
+  // 在组件卸载时清理定时器
+  onUnmounted(() => {
+    clearInterval(timeInterval)
+  })
+})
+</script>
+
+<style scoped>
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-in-out;
+}
+</style>
