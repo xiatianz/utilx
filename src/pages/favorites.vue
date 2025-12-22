@@ -79,9 +79,7 @@ import { getFavoriteTools, initToolsData, addRecentTool } from '~/composables/us
 import { useSEO } from '~/composables/useSEO'
 import ToolCard from '~/components/ToolCard.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 使用SEO composable设置页面标题
 const { setPageTitle } = useSEO()

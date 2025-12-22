@@ -551,9 +551,7 @@ useSeoMeta({
   keywords: ['日期计算', '日期加减', '日期差计算', '工作日计算', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 初始化
 onMounted(() => {

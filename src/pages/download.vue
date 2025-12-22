@@ -111,9 +111,7 @@ import {
 } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 import { useSEO } from '~/composables/useSEO'
 

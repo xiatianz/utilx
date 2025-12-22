@@ -44,7 +44,5 @@ const categoryComponent = computed(() => {
 })
 
 // 设置页面元数据
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

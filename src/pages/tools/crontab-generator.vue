@@ -704,7 +704,5 @@ useSeoMeta({
   keywords: ['crontab', '定时任务', 'cron', 'linux', '表达式生成', '任务调度', '自动化']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

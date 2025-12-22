@@ -852,9 +852,7 @@ useSeoMeta({
   keywords: ['markdown', 'editor', 'preview', 'realtime', 'syntax', '在线编辑器', 'markdown编辑器', '实时预览']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

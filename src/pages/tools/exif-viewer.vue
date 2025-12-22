@@ -700,7 +700,5 @@ useSeoMeta({
   keywords: ['exif', 'exif查看器', '图片元数据', '拍摄参数', 'gps信息', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

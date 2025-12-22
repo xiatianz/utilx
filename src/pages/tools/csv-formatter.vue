@@ -284,9 +284,7 @@ useSeoMeta({
   }
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 const router = useRouter()
 

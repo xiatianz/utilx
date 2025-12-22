@@ -375,9 +375,7 @@ import {
   Copy, Download, X, ArrowRight, Lock, FileText
 } from 'lucide-vue-next'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 import { useSEO } from '~/composables/useSEO'
 

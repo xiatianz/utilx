@@ -835,9 +835,7 @@ useSeoMeta({
   keywords: ['图标生成器', 'favicon生成', '应用图标', 'ico生成', '图标制作', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 清理
 onUnmounted(() => {

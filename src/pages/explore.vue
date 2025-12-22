@@ -122,9 +122,7 @@ import { tools } from '~/data/tools'
 import { initToolsData, getRecentTools, addRecentTool } from '~/composables/useTools'
 import ToolCard from '~/components/ToolCard.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 import { useSEO } from '~/composables/useSEO'
 

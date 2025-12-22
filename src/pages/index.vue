@@ -245,9 +245,7 @@ import { categories } from '~/data/categories'
 import { tools } from '~/data/tools'
 import { initToolsData, getRecentTools, addRecentTool, clearRecentTools } from '~/composables/useTools'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 import { useSEO } from '~/composables/useSEO'
 

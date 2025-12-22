@@ -572,7 +572,5 @@ useSeoMeta({
   keywords: ['CRC计算器', 'CRC校验', 'CRC-8', 'CRC-16', 'CRC-32', '循环冗余校验', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

@@ -406,9 +406,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 const formData = ref({
   currentAge: 25,

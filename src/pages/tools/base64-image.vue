@@ -611,7 +611,5 @@ useSeoMeta({
   keywords: ['base64图片', '图片base64', 'data url', '图片编码', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

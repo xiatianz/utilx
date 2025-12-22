@@ -546,7 +546,5 @@ useSeoMeta({
   keywords: ['贷款计算', '房贷计算', '月供计算', '利息计算', '还款计划', '等额本息', '等额本金']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

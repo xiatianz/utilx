@@ -394,9 +394,7 @@ useSeoMeta({
   keywords: ['base64', '编码', 'encoder', '在线工具', '图片编码', '文件编码']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

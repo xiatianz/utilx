@@ -237,9 +237,7 @@ import { addRecentTool } from '~/composables/useTools'
 import ToolCard from '~/components/ToolCard.vue'
 import Breadcrumb from '~/components/Breadcrumb.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // SEO配置
 useSeoMeta({

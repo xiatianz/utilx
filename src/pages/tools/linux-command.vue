@@ -633,7 +633,5 @@ useSeoMeta({
   keywords: ['linux', '命令生成', 'shell', 'bash', '文件操作', '系统管理', '网络配置', 'ubuntu', 'centos']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

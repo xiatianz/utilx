@@ -855,7 +855,5 @@ useSeoMeta({
   keywords: ['json', 'model', '代码生成', 'typescript', 'java', 'python', 'csharp', 'go', 'kotlin', '数据结构']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

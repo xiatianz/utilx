@@ -683,9 +683,7 @@ useSeoMeta({
   keywords: ['morse', '摩尔斯电码', 'converter', '电报', '编码', '在线工具', '音频播放']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

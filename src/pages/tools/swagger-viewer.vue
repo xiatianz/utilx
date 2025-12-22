@@ -693,7 +693,5 @@ useSeoMeta({
   keywords: ['swagger', 'openapi', 'api', '文档查看', '接口测试', 'api调试', 'rest api']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

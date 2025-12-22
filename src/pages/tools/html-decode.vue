@@ -487,9 +487,7 @@ useSeoMeta({
   keywords: ['html', '解码', 'entity', 'html-decoder', '在线工具', '实体解码', 'html5']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

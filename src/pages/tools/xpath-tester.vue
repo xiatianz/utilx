@@ -665,7 +665,5 @@ useSeoMeta({
   keywords: ['xpath', 'xml', 'query', 'path', 'test', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

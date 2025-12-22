@@ -75,9 +75,7 @@ import { tools } from '~/data/tools'
 import { getRecentTools, initToolsData, addRecentTool, clearRecentTools } from '~/composables/useTools'
 import ToolCard from '~/components/ToolCard.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 import { useSEO } from '~/composables/useSEO'
 

@@ -543,7 +543,5 @@ useSeoMeta({
   keywords: ['文本替换', '查找替换', '正则表达式', '批量替换', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

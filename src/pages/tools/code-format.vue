@@ -584,7 +584,5 @@ useSeoMeta({
   keywords: ['代码格式化', '代码美化', '在线格式化', '代码压缩', 'JavaScript', 'Python', 'JSON']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

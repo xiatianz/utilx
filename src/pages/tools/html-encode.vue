@@ -414,9 +414,7 @@ useSeoMeta({
   keywords: ['html', '编码', 'entity', 'html-encoder', 'xss', '在线工具', '实体编码']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

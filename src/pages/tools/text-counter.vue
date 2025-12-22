@@ -361,7 +361,5 @@ useSeoMeta({
   keywords: ['字数统计', '字符统计', '单词统计', '在线工具', '文本分析']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

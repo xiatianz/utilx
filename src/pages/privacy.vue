@@ -10,11 +10,6 @@
 import MarkdownRenderer from '~/components/MarkdownRenderer.vue'
 import { ref } from 'vue'
 
-definePageMeta({
-  layout: 'default',
-  title: '隐私政策'
-})
-
 import { useSEO } from '~/composables/useSEO'
 
 // 使用SEO composable设置页面标题

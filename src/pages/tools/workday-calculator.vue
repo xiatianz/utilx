@@ -613,9 +613,7 @@ useSeoMeta({
   keywords: ['工作日计算', '工作日天数', '日期计算', '节假日', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 初始化
 onMounted(() => {

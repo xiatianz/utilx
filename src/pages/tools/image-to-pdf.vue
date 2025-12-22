@@ -648,7 +648,5 @@ useSeoMeta({
   keywords: ['图片转PDF', 'PDF转换', 'JPG转PDF', 'PNG转PDF', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

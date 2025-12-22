@@ -512,9 +512,7 @@ useSeoMeta({
   keywords: ['罗马数字转换', '阿拉伯数字转换', 'Roman numeral', '数字转换', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

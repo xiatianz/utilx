@@ -374,7 +374,5 @@ useSeoMeta({
   keywords: ['正则表达式', 'regex', '速查表', '模式匹配', '文本处理', '语法参考', '在线测试']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

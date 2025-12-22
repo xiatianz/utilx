@@ -578,7 +578,5 @@ useSeoMeta({
   keywords: ['密码生成器', '随机密码', '安全密码', '密码强度', '在线生成器']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

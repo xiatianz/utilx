@@ -396,7 +396,5 @@ useSeoMeta({
   keywords: ['字符编码', '编码转换', 'utf-8', 'gbk', 'gb2312', '文本编码', '乱码', '编码格式']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

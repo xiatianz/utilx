@@ -147,9 +147,7 @@ const parseMarkdown = async (text) => {
   return marked.parse(text)
 }
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 const category = categories.find(c => c.id === 'text')
 

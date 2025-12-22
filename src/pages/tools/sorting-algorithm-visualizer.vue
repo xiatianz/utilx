@@ -760,9 +760,7 @@ useSeoMeta({
   keywords: ['排序算法', '算法可视化', '冒泡排序', '快速排序', '归并排序', '算法演示']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

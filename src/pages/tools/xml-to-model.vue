@@ -1195,7 +1195,5 @@ useSeoMeta({
   keywords: ['xml', 'model', '代码生成', 'java', 'csharp', 'python', 'typescript', 'kotlin', 'go', 'jaxb', 'xmlserializer']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

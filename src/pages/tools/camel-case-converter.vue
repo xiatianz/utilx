@@ -623,9 +623,7 @@ useSeoMeta({
   keywords: ['命名格式转换', 'camelCase', 'snake_case', 'kebab-case', 'PascalCase', '命名规范', '编程命名']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

@@ -305,9 +305,7 @@ import Breadcrumb from '~/components/Breadcrumb.vue'
 import ToolCard from '~/components/ToolCard.vue'
 import CryptoJS from 'crypto-js'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 const category = categories.find(c => c.id === 'crypto')
 

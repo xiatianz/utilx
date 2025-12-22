@@ -581,7 +581,5 @@ useSeoMeta({
   keywords: ['jsonpath', 'json', 'query', 'path', 'extract', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

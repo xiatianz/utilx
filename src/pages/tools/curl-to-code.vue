@@ -278,9 +278,7 @@ import { categories } from '~/data/categories'
 import { addRecentTool } from '~/composables/useTools'
 import Breadcrumb from '~/components/Breadcrumb.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 const router = useRouter()
 

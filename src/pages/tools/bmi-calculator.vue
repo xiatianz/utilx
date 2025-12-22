@@ -544,7 +544,5 @@ useSeoMeta({
   keywords: ['BMI计算', '身体质量指数', '体重评估', '健康计算', '理想体重', '肥胖指数']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

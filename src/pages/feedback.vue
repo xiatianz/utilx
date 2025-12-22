@@ -10,10 +10,6 @@
 import MarkdownRenderer from '~/components/MarkdownRenderer.vue'
 import { ref } from 'vue'
 
-definePageMeta({
-  layout: 'default',
-  title: '提交反馈'
-})
 
 import { useSEO } from '~/composables/useSEO'
 

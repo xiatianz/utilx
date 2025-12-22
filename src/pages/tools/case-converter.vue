@@ -321,7 +321,5 @@ useSeoMeta({
   keywords: ['大小写转换', '文本转换', '驼峰式', '蛇形', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

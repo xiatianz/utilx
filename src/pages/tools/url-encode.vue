@@ -358,9 +358,7 @@ useSeoMeta({
   keywords: ['url', '编码', 'encoder', 'percent-encoding', 'urlencode', '在线工具', 'url safe']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

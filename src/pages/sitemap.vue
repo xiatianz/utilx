@@ -217,9 +217,6 @@ import { useSEO } from '~/composables/useSEO'
 const { setPageTitle } = useSEO()
 setPageTitle('站点地图')
 
-definePageMeta({
-  layout: 'default'
-})
 
 // 搜索功能
 const searchQuery = ref('')

@@ -641,9 +641,7 @@ useSeoMeta({
   keywords: ['人民币大写', '数字转大写', '金额转换', '发票规范', '财务工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

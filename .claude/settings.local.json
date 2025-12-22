@@ -44,7 +44,10 @@
       "Bash(pnpm run blog:build)",
       "Bash(find:*)",
       "Bash(hugo:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(wc -l:*)",
+      "Bash(npm run sitemap)",
+      "Bash(npm run build:blog)"
     ],
     "deny": [],
     "ask": []

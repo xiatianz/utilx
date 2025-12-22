@@ -351,9 +351,7 @@ import Breadcrumb from '~/components/Breadcrumb.vue'
 import ToolCard from '~/components/ToolCard.vue'
 import { Clock, Calendar, AlertCircle } from 'lucide-vue-next'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 const category = categories.find(c => c.id === 'crypto')
 

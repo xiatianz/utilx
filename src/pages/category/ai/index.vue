@@ -651,9 +651,7 @@ useSeoMeta({
   keywords: ['AI工具', '人工智能', '大模型', 'ChatGPT', 'Claude', '文心一言', 'AI导航']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 import { useSEO } from '~/composables/useSEO'
 

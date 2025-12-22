@@ -552,7 +552,5 @@ useSeoMeta({
   keywords: ['单位换算', '长度转换', '重量转换', '温度转换', '面积转换', '体积转换', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

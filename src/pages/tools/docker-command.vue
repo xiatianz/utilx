@@ -625,7 +625,5 @@ useSeoMeta({
   keywords: ['docker', '容器', '命令生成', 'docker-compose', '容器化', 'dockerfile', '虚拟化']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

@@ -1,31 +1,4 @@
 export default defineNuxtPlugin(() => {
-  // Web Vitals 监控
-  const reportWebVitals = (metric) => {
-    // 发送到分析服务
-    if (typeof gtag !== 'undefined') {
-      gtag('event', metric.name, {
-        event_category: 'Web Vitals',
-        event_label: metric.id,
-        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
-        non_interaction: true
-      })
-    }
-
-    // 本地存储用于调试
-    const vitals = JSON.parse(localStorage.getItem('webVitals') || '[]')
-    vitals.push({
-      ...metric,
-      timestamp: new Date().toISOString(),
-      url: window.location.pathname
-    })
-
-    // 只保留最近100条记录
-    if (vitals.length > 100) {
-      vitals.splice(0, vitals.length - 100)
-    }
-
-    localStorage.setItem('webVitals', JSON.stringify(vitals))
-  }
 
   // 监控页面性能
   const observePagePerformance = () => {
@@ -129,33 +102,32 @@ export default defineNuxtPlugin(() => {
 
   // 初始化监控
   if (process.client) {
-    // 检查是否可以导入 web-vitals 库
     observePagePerformance()
     observeUserInteractions()
-
-    // Web Vitals monitoring (optional)
-    // 注意：web-vitals库可能会影响构建，如果不需要可以注释掉
-    try {
-      // 使用动态导入，并添加错误处理
-      import('web-vitals/attribution').then(({ onCLS, onINP, onFCP, onLCP, onTTFB }) => {
-        console.log('Web Vitals monitoring enabled')
-        onCLS(reportWebVitals)
-        onINP(reportWebVitals)
-        onFCP(reportWebVitals)
-        onLCP(reportWebVitals)
-        onTTFB(reportWebVitals)
-      }).catch((error) => {
-        console.warn('web-vitals library not available, using built-in performance monitoring only:', error.message)
-      })
-    } catch (error) {
-      console.warn('Failed to load web-vitals library:', error.message)
-    }
   }
 
   // 提供全局访问
   provide('performanceMonitor', {
-    reportWebVitals,
-    getMetrics: () => JSON.parse(localStorage.getItem('webVitals') || '[]'),
-    getInteractions: () => JSON.parse(localStorage.getItem('userInteractions') || '[]')
+    getInteractions: () => JSON.parse(localStorage.getItem('userInteractions') || '[]'),
+    getPerformanceMetrics: () => {
+      // 返回原生性能指标
+      if (!process.client) return {}
+
+      const navigation = performance.getEntriesByType('navigation')[0]
+      const paint = performance.getEntriesByType('paint')
+
+      return {
+        // 页面加载时间
+        pageLoadTime: navigation?.loadEventEnd - navigation?.loadEventStart,
+        // DOM 解析时间
+        domParseTime: navigation?.domContentLoadedEventEnd - navigation?.domContentLoadedEventStart,
+        // 首次绘制时间
+        firstPaint: paint.find(p => p.name === 'first-paint')?.startTime,
+        // 首次内容绘制时间
+        firstContentfulPaint: paint.find(p => p.name === 'first-contentful-paint')?.startTime,
+        // 资源加载统计
+        resourceCount: performance.getEntriesByType('resource').length
+      }
+    }
   })
 })

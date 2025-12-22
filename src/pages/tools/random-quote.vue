@@ -308,9 +308,7 @@
 import { ref, computed } from 'vue'
 import { Quote, RefreshCw, Trash2, Copy, Shuffle, Share2, Heart, List, Hash, Dice6, ArrowRight, BookOpen, Film, Laugh, Brain, Coffee, Microscope, Briefcase } from 'lucide-vue-next'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 import { useSEO } from '~/composables/useSEO'
 

@@ -376,9 +376,7 @@ useHead({
   ]
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 const router = useRouter()
 

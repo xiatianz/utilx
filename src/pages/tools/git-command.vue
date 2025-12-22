@@ -624,7 +624,5 @@ useSeoMeta({
   keywords: ['git', '命令生成', '版本控制', 'git命令', '可视化', 'github', 'gitlab']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

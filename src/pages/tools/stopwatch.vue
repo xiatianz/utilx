@@ -525,9 +525,7 @@ useSeoMeta({
   keywords: ['秒表', '计时器', '在线计时', '精确计时', '运动计时', '学习计时']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 生命周期
 onMounted(() => {

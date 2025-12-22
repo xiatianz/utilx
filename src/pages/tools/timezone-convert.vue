@@ -524,9 +524,7 @@ useSeoMeta({
   keywords: ['timezone', '时区', '时间转换', 'utc', 'gmt', '夏令时', '会议时间', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 初始化
 onMounted(() => {

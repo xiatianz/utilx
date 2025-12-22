@@ -500,9 +500,7 @@ useSeoMeta({
   keywords: ['ascii', '码表', '字符集', '编码', '十进制', '十六进制', '在线工具', 'ascii table']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

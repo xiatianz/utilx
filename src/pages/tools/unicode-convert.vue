@@ -597,9 +597,7 @@ useSeoMeta({
   keywords: ['unicode', '转换', 'converter', '码点', '转义序列', '在线工具', '编码转换']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

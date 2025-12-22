@@ -938,7 +938,5 @@ useSeoMeta({
   keywords: ['颜色选择器', '取色器', '颜色转换', 'RGB', 'HSL', 'HEX', 'CMYK', '渐变生成器']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

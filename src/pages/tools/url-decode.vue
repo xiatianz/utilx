@@ -361,9 +361,7 @@ useSeoMeta({
   keywords: ['url', '解码', 'decoder', 'percent-encoding', 'urldecode', '在线工具', '批量解码']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

@@ -629,7 +629,5 @@ useSeoMeta({
   keywords: ['图片格式转换', '图片转WebP', 'JPG转PNG', '格式转换', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

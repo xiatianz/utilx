@@ -35,9 +35,7 @@ import Breadcrumb from '~/components/Breadcrumb.vue'
 import ToolCard from '~/components/ToolCard.vue'
 import SeoKnowledgeBase from '~/components/SeoKnowledgeBase.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 import { useSEO } from '~/composables/useSEO'
 

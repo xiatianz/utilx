@@ -318,9 +318,7 @@ import Breadcrumb from '~/components/Breadcrumb.vue'
 import ToolCard from '~/components/ToolCard.vue'
 import { JSEncrypt } from 'jsencrypt'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 const category = categories.find(c => c.id === 'crypto')
 

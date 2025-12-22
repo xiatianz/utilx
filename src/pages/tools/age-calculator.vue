@@ -553,9 +553,7 @@ useSeoMeta({
   keywords: ['年龄计算', '生日计算', '星座查询', '生日倒计时', '精确年龄', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 初始化
 onMounted(() => {

@@ -10,11 +10,6 @@
 import MarkdownRenderer from '~/components/MarkdownRenderer.vue'
 import { ref, onMounted } from 'vue'
 
-definePageMeta({
-  layout: 'default',
-  title: '常见问题'
-})
-
 import { useSEO } from '~/composables/useSEO'
 
 // 使用SEO composable设置页面标题

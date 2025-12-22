@@ -378,9 +378,7 @@ import { categories } from '~/data/categories'
 import { addRecentTool } from '~/composables/useTools'
 import Breadcrumb from '~/components/Breadcrumb.vue'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // SEO配置
 useSeoMeta({

@@ -516,9 +516,7 @@ useSeoMeta({
   keywords: ['周数计算', 'ISO周数', '第几周', '周数转日期', '日历', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 初始化
 onMounted(() => {

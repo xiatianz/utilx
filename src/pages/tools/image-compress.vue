@@ -597,9 +597,7 @@ useSeoMeta({
   keywords: ['图片压缩', '在线压缩', 'JPG压缩', 'PNG压缩', '图片优化', '图片大小']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 清理
 watch(images, (newImages) => {

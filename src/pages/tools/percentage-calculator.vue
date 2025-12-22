@@ -579,7 +579,5 @@ useSeoMeta({
   keywords: ['百分比计算', '占比计算', '增幅计算', '折扣计算', '小费计算', '税率计算', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

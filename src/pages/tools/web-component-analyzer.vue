@@ -52,9 +52,7 @@ import { tools } from '~/data/tools'
 import { categories } from '~/data/categories'
 import { addRecentTool } from '~/composables/useTools'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // SEO配置
 useSeoMeta({

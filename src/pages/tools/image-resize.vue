@@ -733,9 +733,7 @@ useSeoMeta({
   keywords: ['图片尺寸', '图片调整', '图片缩放', '像素调整', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 清理
 onUnmounted(() => {

@@ -631,7 +631,5 @@ useSeoMeta({
   keywords: ['json schema', 'schema', 'json', '数据验证', '类型定义', 'api文档', '数据结构']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

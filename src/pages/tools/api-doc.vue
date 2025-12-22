@@ -691,7 +691,5 @@ useSeoMeta({
   keywords: ['api', '文档生成', 'openapi', 'swagger', 'rest api', '文档工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>

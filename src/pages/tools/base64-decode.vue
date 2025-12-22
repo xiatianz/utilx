@@ -436,9 +436,7 @@ useSeoMeta({
   keywords: ['base64', '解码', 'decoder', '在线工具', '图片解码', '文本解码']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 </script>
 
 <style scoped>

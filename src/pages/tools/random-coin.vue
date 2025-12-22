@@ -313,9 +313,7 @@
 import { ref, computed } from 'vue'
 import { Circle, RefreshCw, Trash2, Copy, Dice6, Heart, List, ArrowRight } from 'lucide-vue-next'
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 import { useSEO } from '~/composables/useSEO'
 

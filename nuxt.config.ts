@@ -17,56 +17,90 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxtjs/tailwindcss',
-    // PWA模块仅在生产环境启用，且配置独立
-    process.env.NODE_ENV === 'production' ? '@vite-pwa/nuxt' : undefined
-  ].filter(Boolean) as string[], // 确保类型正确
-
-  // modules: [
-  //   '@nuxtjs/tailwindcss',
-  //   process.env.NODE_ENV === 'production' ? [
-  //     '@vite-pwa/nuxt', {
-  //       registerType: 'autoUpdate',
-  //       strategies: 'generateSW',
-  //       injectRegister: 'auto',
-  //       workbox: {
-  //         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-  //         navigateFallback: '/',
-  //         skipWaiting: true,
-  //         clientsClaim: true,
-  //         // 不要缓存错误页面
-  //         navigateFallbackDenylist: [/^\/200$/, /^\/404$/],
-  //         runtimeCaching: [
-  //           {
-  //             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-  //             handler: 'CacheFirst',
-  //             options: {
-  //               cacheName: 'google-fonts-cache',
-  //               expiration: {
-  //                 maxEntries: 10,
-  //                 maxAgeSeconds: 60 * 60 * 24 * 365 // 1 年
-  //               }
-  //             }
-  //           },
-  //           {
-  //             urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-  //             handler: 'CacheFirst',
-  //             options: {
-  //               cacheName: 'gstatic-fonts-cache',
-  //               expiration: {
-  //                 maxEntries: 10,
-  //                 maxAgeSeconds: 60 * 60 * 24 * 365 // 1 年
-  //               }
-  //             }
-  //           }
-  //         ]
-  //       },
-  //       client: {
-  //         installPrompt: true,
-  //         periodicSyncForUpdates: 30 * 60 * 1000 // 30 分钟
-  //       }
-  //     }
-  //   ] : null
-  // ].filter(Boolean),
+    // PWA模块配置
+    [
+      '@vite-pwa/nuxt',
+      {
+        registerType: 'autoUpdate',
+        strategies: 'generateSW',
+        injectRegister: 'auto',
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+          navigateFallback: '/',
+          skipWaiting: true,
+          clientsClaim: true,
+          runtimeCaching: [
+            {
+              urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'google-fonts-cache',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1 年
+                }
+              }
+            },
+            {
+              urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'gstatic-fonts-cache',
+                expiration: {
+                  maxEntries: 10,
+                  maxAgeSeconds: 60 * 60 * 24 * 365 // 1 年
+                }
+              }
+            }
+          ]
+        },
+        client: {
+          installPrompt: true,
+          periodicSyncForUpdates: 30 * 60 * 1000 // 30 分钟
+        },
+        // 添加推送通知支持
+        webManifest: {
+          name: '有条工具 - 开发者效率工具箱',
+          short_name: '有条工具',
+          description: '极简、高效、全能的开发者工具集合',
+          theme_color: '#6366f1',
+          background_color: '#0f172a',
+          display: 'standalone',
+          orientation: 'any',
+          scope: '/',
+          start_url: '/',
+          lang: 'zh-CN',
+          dir: 'ltr',
+          icons: [
+            {
+              src: 'logo/logo-96.png',
+              sizes: '96x96',
+              type: 'image/png'
+            },
+            {
+              src: 'logo/logo-128.png',
+              sizes: '128x128',
+              type: 'image/png'
+            },
+            {
+              src: 'logo/logo-256.png',
+              sizes: '256x256',
+              type: 'image/png'
+            },
+            {
+              src: 'logo/logo-512.png',
+              sizes: '512x512',
+              type: 'image/png'
+            }
+          ],
+          categories: ['productivity', 'utilities', 'developer'],
+          // 推送通知相关配置
+          gcm_sender_id: '103953800507', // GCM 发送者ID（需要替换为您的）
+          gcm_user_visible_only: true
+        }
+      }
+    ]
+  ],
 
   vite: {
     plugins: [
@@ -141,7 +175,7 @@ export default defineNuxtConfig({
       chunkSizeWarningLimit: 1000
     },
     // 外部依赖配置（对开发和生产环境都生效）
-    external: ['web-vitals/attribution'],
+    external: [],
     optimizeDeps: {
       // 预构建优化
       include: [
@@ -210,30 +244,34 @@ export default defineNuxtConfig({
   },
   // 配置路由规则
   nitro: {
+    // 优化内存使用
+    minify: true,
+    sourceMap: false,
+    // 只预渲染重要页面，避免内存溢出
     prerender: {
       routes: [
         '/',
         '/all',
+        '/about',
+        '/faq',
+        '/privacy',
+        '/terms',
         '/ai',
-        '/calculate',
         '/crypto',
-        '/data',
-        '/design',
         '/dev',
         '/encode',
-        '/finance',
         '/format',
-        '/health',
         '/image',
         '/network',
-        '/productivity',
-        '/random',
-        '/security',
         '/text',
         '/time',
-        '/visualization',
-        '/tags'
-      ]
+        '/tags',
+        '/sitemap'
+      ],
+      // 优化预渲染配置
+      concurrency: 1, // 减少并发数
+      failOnError: false, // 遇到错误不中断构建
+      interval: 100 // 添加间隔，避免过快渲染
     },
     // 静态资源处理
     publicAssets: [

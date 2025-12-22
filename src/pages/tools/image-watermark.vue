@@ -1037,9 +1037,7 @@ useSeoMeta({
   keywords: ['图片水印', '水印生成', '版权保护', '批量水印', '在线工具']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 清理
 onUnmounted(() => {

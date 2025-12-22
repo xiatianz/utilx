@@ -586,9 +586,7 @@ useSeoMeta({
   keywords: ['倒计时', '计时器', '番茄工作法', '在线工具', '时间管理']
 })
 
-definePageMeta({
-  layout: 'default'
-})
+
 
 // 清理
 onUnmounted(() => {
