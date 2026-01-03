@@ -56,7 +56,10 @@
       "Bash(then echo \"$tool exists\")",
       "Bash(else echo \"$tool missing\")",
       "Bash(fi)",
-      "Bash(/Users/apple/.nvm/versions/node/v22.21.1/bin/node /Users/apple/Documents/code/util/scripts/generate-sitemap.js:*)"
+      "Bash(/Users/apple/.nvm/versions/node/v22.21.1/bin/node /Users/apple/Documents/code/util/scripts/generate-sitemap.js:*)",
+      "Bash(pnpm run build:*)",
+      "Bash(for file in utf-8-convert sql-escape ip-address-convert ascii-convert query-string-parser css-escape punycode-convert xml-escape color-convert quoted-printable bash-escape regex-escape)",
+      "Bash(do grep -n \"^<script setup>\" /Users/apple/Documents/code/util/src/pages/tools/$file.vue)"
     ],
     "deny": [],
     "ask": []

@@ -1,7 +1,7 @@
 ---
 title: "AI应用指南：从入门到实践"
 slug: "ai-applications-guide"
-date: 2025-12-16T17:00:00+08:00
+date: 2026-01-03T10:00:00+08:00
 draft: false
 tags: ['AI', '人工智能', '机器学习', '深度学习', '应用指南']
 categories: ['技术分享']
