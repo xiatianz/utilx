@@ -59,7 +59,18 @@
       "Bash(/Users/apple/.nvm/versions/node/v22.21.1/bin/node /Users/apple/Documents/code/util/scripts/generate-sitemap.js:*)",
       "Bash(pnpm run build:*)",
       "Bash(for file in utf-8-convert sql-escape ip-address-convert ascii-convert query-string-parser css-escape punycode-convert xml-escape color-convert quoted-printable bash-escape regex-escape)",
-      "Bash(do grep -n \"^<script setup>\" /Users/apple/Documents/code/util/src/pages/tools/$file.vue)"
+      "Bash(do grep -n \"^<script setup>\" /Users/apple/Documents/code/util/src/pages/tools/$file.vue)",
+      "Bash(/Users/apple/.nvm/versions/node/v22.21.1/bin/npm run build)",
+      "Bash(PATH=/Users/apple/.nvm/versions/node/v22.21.1/bin:$PATH npm run build:*)",
+      "Bash(PATH=/Users/apple/.nvm/versions/node/v22.21.1/bin:$PATH nuxt build:*)",
+      "Bash(/Users/apple/.nvm/versions/node/v22.21.1/bin/node /Users/apple/.nvm/versions/node/v22.21.1/bin/npx nuxt build:*)",
+      "Bash(export PATH=/Users/apple/.nvm/versions/node/v22.21.1/bin:$PATH)",
+      "Bash(export PATH=/Users/apple/.nvm/versions/node/v22.21.1/bin:/usr/local/bin:/usr/bin:/bin)",
+      "Bash(/Users/apple/.nvm/versions/node/v22.21.1/bin/node:*)",
+      "Bash(/Users/apple/.nvm/versions/node/v22.21.1/bin/npm run build:nuxt:*)",
+      "Bash(bash -c 'export PATH=\"\"/Users/apple/.nvm/versions/node/v22.21.1/bin:$PATH\"\" && npx nuxt build 2>&1')",
+      "Bash(bash -c 'export PATH=\"\"/Users/apple/.nvm/versions/node/v22.21.1/bin:$PATH\"\" && npm run build:nuxt 2>&1')",
+      "Bash(/Users/apple/.nvm/versions/node/v22.21.1/bin/npx nuxt build)"
     ],
     "deny": [],
     "ask": []

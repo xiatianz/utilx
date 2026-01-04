@@ -424,13 +424,12 @@ const loadTagData = async () => {
   try {
     const tagName = decodeURIComponent(tagParam.value)
 
-    // 查找标签
+    // 查找标签 - 先在 tagDefinitions 中查找，找不到则使用 getTagInfo 的默认值
     let foundTag = tagDefinitions.find(t => t.name === tagName)
 
+    // 如果在预定义标签中找不到，使用 getTagInfo 获取默认标签信息
     if (!foundTag) {
-      console.error(`Tag not found: ${tagName}`)
-      router.push('/tags')
-      return
+      foundTag = getTagInfo(tagName)
     }
 
     // 获取标签下的所有工具

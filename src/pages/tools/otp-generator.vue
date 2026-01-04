@@ -195,14 +195,7 @@
             <h3 class="font-medium mb-3 text-center">添加到验证器应用</h3>
             <div class="flex justify-center mb-4">
               <div class="p-4 bg-white rounded-lg inline-block">
-                <!-- Simple QR code placeholder - in production use a QR library -->
-                <div class="w-48 h-48 bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-center">
-                  <div class="text-sm text-gray-500">
-                    <QrCode class="w-16 h-16 mx-auto mb-2" />
-                    <p>QR Code</p>
-                    <p class="text-xs mt-2">扫描下方URI添加</p>
-                  </div>
-                </div>
+                <canvas ref="qrCanvas" class="w-48 h-48"></canvas>
               </div>
             </div>
 
@@ -361,7 +354,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick, watchEffect } from 'vue'
+import QRCode from 'qrcode'
 import {
   Settings,
   Clock,
@@ -405,6 +399,9 @@ const accountName = ref('user@example.com')
 const currentOTP = ref('')
 const otpTimeRemaining = ref(30)
 const otpHistory = ref<string[]>([])
+
+// QR Code canvas ref
+const qrCanvas = ref<HTMLCanvasElement | null>(null)
 
 let otpInterval: any = null
 let countdownInterval: any = null
@@ -474,10 +471,13 @@ async function calculateTOTP(secret: string, time: number): Promise<string> {
     const timeView = new DataView(timeBuffer)
     timeView.setUint32(4, Math.floor(time / period.value), false) // Big-endian
 
+    // Convert algorithm to correct Web Crypto API format
+    const hashAlgorithm = algorithm.value === 'SHA1' ? 'SHA-1' : algorithm.value === 'SHA256' ? 'SHA-256' : 'SHA-512'
+
     const cryptoKey = await crypto.subtle.importKey(
       'raw',
       secretBytes,
-      { name: 'HMAC', hash: algorithm.value },
+      { name: 'HMAC', hash: hashAlgorithm },
       false,
       ['sign']
     )
@@ -508,10 +508,13 @@ async function calculateHOTP(secret: string, counter: number): Promise<string> {
     const counterView = new DataView(counterBuffer)
     counterView.setUint32(4, counter, false) // Big-endian
 
+    // Convert algorithm to correct Web Crypto API format
+    const hashAlgorithm = algorithm.value === 'SHA1' ? 'SHA-1' : algorithm.value === 'SHA256' ? 'SHA-256' : 'SHA-512'
+
     const cryptoKey = await crypto.subtle.importKey(
       'raw',
       secretBytes,
-      { name: 'HMAC', hash: algorithm.value },
+      { name: 'HMAC', hash: hashAlgorithm },
       false,
       ['sign']
     )
@@ -625,6 +628,24 @@ watch([secretKey, otpType, digits, algorithm, period, hotpCounter], () => {
     startTOTPInterval()
   } else {
     stopTOTPInterval()
+  }
+})
+
+// Generate QR Code when OTP URI changes
+watchEffect(async () => {
+  if (otpUri.value && qrCanvas.value) {
+    try {
+      await QRCode.toCanvas(qrCanvas.value, otpUri.value, {
+        width: 192,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        }
+      })
+    } catch (error) {
+      console.error('QR Code generation error:', error)
+    }
   }
 })
 

@@ -166,7 +166,6 @@ const breadcrumbs = computed(() => {
 
     // 获取标签信息
     try {
-      const { getTagInfo } = require('~/data/tags')
       const tagInfo = getTagInfo(decodedTagId)
       if (tagInfo.name) {
         paths.push({

@@ -242,22 +242,22 @@
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
       <h2 class="text-xl font-semibold mb-4">相关工具</h2>
       <div class="grid md:grid-cols-4 gap-4">
-        <NuxtLink to="/base64-encode" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+        <NuxtLink to="/tools/base64-encode" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
           <Hash class="w-8 h-8 text-blue-500 mb-2" />
           <h3 class="font-medium">Base64编码</h3>
           <p class="text-sm text-gray-500">Base64编码/解码</p>
         </NuxtLink>
-        <NuxtLink to="/hex-convert" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+        <NuxtLink to="/tools/hex-convert" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
           <Hash class="w-8 h-8 text-green-500 mb-2" />
           <h3 class="font-medium">十六进制</h3>
           <p class="text-sm text-gray-500">Hex转换</p>
         </NuxtLink>
-        <NuxtLink to="/url-encode" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+        <NuxtLink to="/tools/url-encode" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
           <Link class="w-8 h-8 text-purple-500 mb-2" />
           <h3 class="font-medium">URL编码</h3>
           <p class="text-sm text-gray-500">URL编码/解码</p>
         </NuxtLink>
-        <NuxtLink to="/otp-generator" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+        <NuxtLink to="/tools/otp-generator" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
           <Clock class="w-8 h-8 text-red-500 mb-2" />
           <h3 class="font-medium">OTP生成器</h3>
           <p class="text-sm text-gray-500">动态口令</p>

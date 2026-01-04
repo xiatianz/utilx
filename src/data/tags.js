@@ -1081,6 +1081,8 @@ export function getTagInfo(tagName) {
   if (!tag) {
     // 如果还是没找到，返回默认值
     return {
+      id: tagName,
+      name: tagName,
       icon: 'Tag',
       color: '#6B7280',
       description: `${tagName}相关工具集合`,
