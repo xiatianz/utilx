@@ -1,9 +1,9 @@
 <template>
   <div class="max-w-8xl mx-auto">
-    <!-- 头部 -->
+    <!-- Hero 头部区 -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-3">增强剪贴板管理器</h1>
-      <p class="text-muted-foreground mb-4">支持分类、搜索、格式化的剪贴板历史记录管理</p>
+      <h1 class="text-3xl font-bold text-foreground mb-3">增强剪贴板管理器 - 分类搜索格式化剪贴板历史</h1>
+      <p class="text-muted-foreground">支持分类、搜索、格式化的剪贴板历史记录管理。纯本地计算，数据隐私绝对安全。</p>
     </div>
 
     <!-- 工具容器 -->
@@ -20,10 +20,10 @@
                 {{ currentClipboard.content }}
               </div>
               <div class="flex gap-2 text-xs">
-                <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                <span class="px-2 py-1 bg-primary/20 text-primary rounded">
                   {{ getContentType(currentClipboard.content) }}
                 </span>
-                <span class="px-2 py-1 bg-green-100 text-green-800 rounded">
+                <span class="px-2 py-1 bg-secondary/20 text-secondary-foreground rounded">
                   {{ formatBytes(currentClipboard.content.length) }}
                 </span>
               </div>
@@ -37,7 +37,7 @@
             @click="captureClipboard"
             class="w-full mt-3 px-3 py-2 bg-primary text-primary-foreground rounded text-sm"
           >
-            📋 捕获剪贴板
+            捕获剪贴板
           </button>
         </div>
 
@@ -68,7 +68,7 @@
               >
               <button
                 @click="addCategory"
-                class="px-2 py-1 bg-green-500 text-white rounded text-xs"
+                class="px-2 py-1 bg-primary text-primary-foreground rounded text-xs"
               >
                 ✓
               </button>
@@ -258,7 +258,7 @@
                   </div>
 
                   <div class="flex gap-2 text-xs mb-1">
-                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded">
+                    <span class="px-2 py-1 bg-primary/20 text-primary rounded">
                       {{ getContentType(item.content) }}
                     </span>
                     <span
@@ -268,7 +268,7 @@
                     >
                       {{ getCategoryName(item.category) }}
                     </span>
-                    <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded">
+                    <span class="px-2 py-1 bg-muted text-muted-foreground rounded">
                       {{ formatTime(item.timestamp) }}
                     </span>
                   </div>
@@ -311,12 +311,12 @@
 
     <!-- 编辑对话框 -->
     <div v-if="editingItem" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
-        <h3 class="text-lg font-semibold mb-4">编辑剪贴板项</h3>
+      <div class="bg-card rounded-lg p-6 max-w-2xl w-full mx-4">
+        <h3 class="text-lg font-semibold text-foreground mb-4">编辑剪贴板项</h3>
 
         <div class="space-y-4">
           <div>
-            <label class="block text-sm font-medium mb-1">标题</label>
+            <label class="block text-sm font-medium text-foreground mb-1">标题</label>
             <input
               v-model="editingItem.title"
               type="text"
@@ -325,17 +325,17 @@
           </div>
 
           <div>
-            <label class="block text-sm font-medium mb-1">内容</label>
+            <label class="block text-sm font-medium text-foreground mb-1">内容</label>
             <textarea
               v-model="editingItem.content"
-              class="w-full px-3 py-2 border rounded-md resize-none"
+              class="w-full px-3 py-2 border border-border rounded-md resize-none bg-background"
               rows="8"
             ></textarea>
           </div>
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium mb-1">分类</label>
+              <label class="block text-sm font-medium text-foreground mb-1">分类</label>
               <select v-model="editingItem.category" class="w-full px-3 py-2 border rounded-md">
                 <option value="">无分类</option>
                 <option v-for="category in categories" :key="category.id" :value="category.id">
@@ -345,7 +345,7 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium mb-1">标签</label>
+              <label class="block text-sm font-medium text-foreground mb-1">标签</label>
               <input
                 v-model="editingItem.tags"
                 placeholder="用逗号分隔"
@@ -371,16 +371,183 @@
         </div>
       </div>
     </div>
+
+    <!-- SEO 内容长尾区 -->
+    <div class="p-6 mb-12 relative">
+      <!-- 折叠按钮 -->
+      <button
+        @click="toggleSeoContent"
+        class="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+        :title="isSeoContentVisible ? '折叠内容' : '展开内容'"
+      >
+        <HelpCircle v-if="!isSeoContentVisible" class="w-5 h-5" />
+        <ChevronUp v-else class="w-5 h-5" />
+      </button>
+
+      <!-- 内容区域 -->
+      <div v-show="isSeoContentVisible">
+        <h2 class="text-2xl font-bold text-foreground mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          什么是增强剪贴板管理器？
+        </h2>
+        <p class="text-muted-foreground mb-4">
+          增强剪贴板管理器是一款功能强大的剪贴板历史记录管理工具，支持内容分类、智能搜索、格式化预览等功能。
+          它能够自动捕获您的剪贴板内容，并按照类型（文本、代码、链接、图片等）进行智能分类，
+          让您能够快速找到之前复制过的内容。
+          所有处理都在浏览器本地完成，数据不会上传到服务器，确保您的隐私安全。
+        </p>
+        <p class="text-muted-foreground">
+          为什么需要剪贴板管理器？在日常工作中，我们经常需要重复使用之前复制过的内容，
+          但系统默认的剪贴板只能保存最后一次复制的内容。增强剪贴板管理器可以保存完整的历史记录，
+          支持收藏重要内容、按分类筛选、智能搜索等功能，大大提高工作效率。
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          如何使用本工具
+        </h2>
+        <ol class="list-decimal list-inside space-y-2 text-muted-foreground mb-6">
+          <li>点击"捕获剪贴板"按钮手动捕获当前剪贴板内容</li>
+          <li>或在设置中启用"自动捕获剪贴板"功能，每秒自动检测</li>
+          <li>使用分类管理功能创建自定义分类，帮助组织内容</li>
+          <li>通过搜索和过滤功能快速找到需要的历史记录</li>
+          <li>点击星标收藏重要内容，方便快速访问</li>
+        </ol>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          核心功能特性
+        </h2>
+        <ul class="list-disc list-inside space-y-2 text-muted-foreground mb-6">
+          <li><strong>智能分类</strong>: 自动识别内容类型（文本、代码、链接、图片、JSON）</li>
+          <li><strong>自定义分类</strong>: 创建个性化分类，使用不同颜色标识</li>
+          <li><strong>高级搜索</strong>: 支持内容搜索、分类过滤、类型筛选、时间范围过滤</li>
+          <li><strong>收藏功能</strong>: 星标收藏重要内容，优先显示收藏项</li>
+          <li><strong>本地安全</strong>: 所有处理都在浏览器本地完成，数据不会上传到服务器</li>
+          <li><strong>自动捕获</strong>: 可选自动捕获功能，实时监控剪贴板变化</li>
+          <li><strong>数据导出</strong>: 支持导出剪贴板历史记录为JSON文件</li>
+          <li><strong>使用统计</strong>: 记录每条内容的使用次数，智能排序</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          常见问题 (FAQ)
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">剪贴板管理器会收集我的数据吗？</h3>
+            <p class="text-muted-foreground mt-1">
+              不会。我们的剪贴板管理器采用纯前端技术实现，所有处理都在您的浏览器本地完成，
+              数据不会上传到任何服务器。您的剪贴板历史记录只保存在本地浏览器中，确保隐私安全。
+              您可以随时使用"导出数据"功能备份您的剪贴板历史记录。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">如何启用自动捕获功能？</h3>
+            <p class="text-muted-foreground mt-1">
+              在左侧设置面板中，勾选"自动捕获剪贴板"选项即可启用。
+              启用后，工具会每秒自动检测剪贴板变化，当发现新内容时会自动添加到历史记录中。
+              注意：自动捕获功能需要浏览器授权访问剪贴板权限。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">支持哪些内容类型？</h3>
+            <p class="text-muted-foreground mt-1">
+              工具支持多种内容类型的自动识别：文本（纯文本内容）、代码（包含编程语法特征）、
+              链接（URL地址）、JSON数据、图片（图片链接或Base64编码）。
+              系统会根据内容特征自动判断类型，也可以手动为内容分配自定义分类。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">历史记录会一直保存吗？</h3>
+            <p class="text-muted-foreground mt-1">
+              历史记录会一直保存在浏览器本地，直到您手动清除或浏览器清除缓存。
+              您可以在设置中调整"最大历史记录"数量（10-1000条），当超过限制时，
+              系统会自动删除最旧的记录。建议定期使用"导出数据"功能备份重要内容。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 相关推荐区 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-foreground mb-4">您可能还需要...</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <NuxtLink
+          v-for="relatedTool in relatedTools"
+          :key="relatedTool.id"
+          :to="`/tools/${relatedTool.id}`"
+          class="block p-4 bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <component
+              :is="iconMap[relatedTool.icon]"
+              class="w-5 h-5 text-primary"
+            />
+            <span class="font-medium text-foreground">{{ relatedTool.name }}</span>
+          </div>
+          <p class="text-sm text-muted-foreground line-clamp-2">{{ relatedTool.description }}</p>
+        </NuxtLink>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useSEO } from '~/composables/useSEO'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import {
+  Clipboard, HelpCircle, ChevronUp,
+  FileText, Lock, Shield, Clock, Type, Code,
+  Database, Link, Hash, Save, Trash2, Edit2, Star, Search
+} from 'lucide-vue-next'
+import { tools } from '~/data/tools'
+import { addRecentTool } from '~/composables/useTools'
 
-// 设置SEO
-const { setPageTitle } = useSEO()
-setPageTitle('增强剪贴板管理器 - 分类搜索格式化剪贴板历史')
+// SEO配置
+useSeoMeta({
+  title: '增强剪贴板管理器 - 分类搜索格式化剪贴板历史 | Util工具箱',
+  description: '免费在线剪贴板管理器，支持内容分类、智能搜索、格式化预览。纯本地计算，数据安全隐私。自动捕获剪贴板，提高工作效率。',
+  keywords: '剪贴板管理器,剪贴板历史,剪贴板工具,剪贴板增强,在线剪贴板,剪贴板记录,剪贴板备份',
+  author: 'Util工具箱',
+  ogTitle: '增强剪贴板管理器 - 分类搜索格式化剪贴板历史',
+  ogDescription: '专业的剪贴板管理器，支持内容分类、智能搜索、格式化预览。纯前端处理，数据安全可靠。',
+  ogImage: 'https://util.cn/images/tools/clipboard-manager-pro.png',
+  ogUrl: 'https://util.cn/tools/clipboard-manager-pro',
+  ogType: 'website'
+})
+
+// 图标映射
+const iconMap = {
+  FileText, Lock, Shield, Clock, Type, Code,
+  Database, Link, Hash
+}
+
+// 相关工具
+const relatedTools = computed(() => {
+  const recommended = [
+    tools.find(t => t.id === 'text-tools'),
+    tools.find(t => t.id === 'code-formatter'),
+    tools.find(t => t.id === 'base64-encoder'),
+    tools.find(t => t.id === 'url-encoder')
+  ].filter(Boolean)
+
+  return recommended.slice(0, 4)
+})
+
+// SEO内容折叠状态
+const isSeoContentVisible = ref(true)
+
+const router = useRouter()
+
+// 定义当前工具
+const tool = tools.find(t => t.id === 'clipboard-manager-pro')
+
+// 添加到最近使用
+if (tool) {
+  addRecentTool(tool.id)
+}
 
 // 数据
 const currentClipboard = ref(null)
@@ -683,6 +850,11 @@ const exportData = () => {
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
+}
+
+// 切换SEO内容显示状态
+const toggleSeoContent = () => {
+  isSeoContentVisible.value = !isSeoContentVisible.value
 }
 
 // 自动捕获

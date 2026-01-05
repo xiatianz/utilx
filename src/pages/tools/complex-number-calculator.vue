@@ -1,61 +1,62 @@
 <template>
-  <div class="max-w-4xl mx-auto p-6">
+  <div class="max-w-8xl mx-auto">
+    <!-- Hero 头部区 -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-2">复数计算器</h1>
-      <p class="text-gray-600 dark:text-gray-400">复数四则运算、模幅角计算、极坐标转换</p>
+      <h1 class="text-3xl font-bold text-foreground mb-3">复数计算器 - 复数运算工具</h1>
+      <p class="text-muted-foreground">在线复数计算器，支持复数加减乘除运算、模幅角计算、极坐标转换、共轭复数计算。适用于数学学习、工程计算等场景。</p>
     </div>
 
     <!-- 复数输入 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
-      <h2 class="text-xl font-semibold mb-4">复数输入</h2>
+    <div class="bg-card rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4 text-foreground">复数输入</h2>
 
       <div class="grid md:grid-cols-2 gap-6">
         <div>
-          <label class="block text-sm font-medium mb-2">复数 A (a + bi)</label>
+          <label class="block text-sm font-medium mb-2 text-foreground">复数 A (a + bi)</label>
           <div class="flex gap-2 items-center">
             <input
               v-model.number="complexA.real"
               type="number"
               step="0.01"
-              class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+              class="flex-1 px-4 py-2 border border-border rounded-lg bg-muted"
               placeholder="实部 a"
             >
-            <span class="text-gray-500">+</span>
+            <span class="text-muted-foreground">+</span>
             <input
               v-model.number="complexA.imag"
               type="number"
               step="0.01"
-              class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+              class="flex-1 px-4 py-2 border border-border rounded-lg bg-muted"
               placeholder="虚部 b"
             >
-            <span class="text-gray-500">i</span>
+            <span class="text-muted-foreground">i</span>
           </div>
-          <p class="text-sm text-blue-600 dark:text-blue-400 mt-2">
+          <p class="text-sm text-primary mt-2">
             {{ formatComplex(complexA.real, complexA.imag) }}
           </p>
         </div>
 
         <div>
-          <label class="block text-sm font-medium mb-2">复数 B (c + di)</label>
+          <label class="block text-sm font-medium mb-2 text-foreground">复数 B (c + di)</label>
           <div class="flex gap-2 items-center">
             <input
               v-model.number="complexB.real"
               type="number"
               step="0.01"
-              class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+              class="flex-1 px-4 py-2 border border-border rounded-lg bg-muted"
               placeholder="实部 c"
             >
-            <span class="text-gray-500">+</span>
+            <span class="text-muted-foreground">+</span>
             <input
               v-model.number="complexB.imag"
               type="number"
               step="0.01"
-              class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+              class="flex-1 px-4 py-2 border border-border rounded-lg bg-muted"
               placeholder="虚部 d"
             >
-            <span class="text-gray-500">i</span>
+            <span class="text-muted-foreground">i</span>
           </div>
-          <p class="text-sm text-blue-600 dark:text-blue-400 mt-2">
+          <p class="text-sm text-primary mt-2">
             {{ formatComplex(complexB.real, complexB.imag) }}
           </p>
         </div>
@@ -63,7 +64,7 @@
 
       <!-- 运算选择 -->
       <div class="mt-6">
-        <label class="block text-sm font-medium mb-2">选择运算</label>
+        <label class="block text-sm font-medium mb-2 text-foreground">选择运算</label>
         <div class="flex flex-wrap gap-2">
           <button
             v-for="op in operations"
@@ -72,8 +73,8 @@
             :class="[
               'px-4 py-2 rounded-lg transition',
               selectedOperation === op.id
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 hover:bg-blue-100 dark:hover:bg-blue-900'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted hover:bg-muted/80 text-foreground'
             ]"
           >
             {{ op.symbol }}
@@ -85,89 +86,89 @@
     <!-- 计算结果 -->
     <div class="grid md:grid-cols-2 gap-6 mb-6">
       <!-- 运算结果 -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold mb-4">运算结果</h2>
+      <div class="bg-card rounded-xl p-6">
+        <h2 class="text-xl font-semibold mb-4 text-foreground">运算结果</h2>
 
         <div v-if="result" class="space-y-4">
-          <div class="p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg">
-            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">结果 (a + bi)</p>
-            <p class="text-2xl font-bold text-green-600 dark:text-green-400">
+          <div class="p-4 bg-muted rounded-lg">
+            <p class="text-sm text-muted-foreground mb-1">结果 (a + bi)</p>
+            <p class="text-2xl font-bold text-primary">
               {{ formatComplex(result.real, result.imag) }}
             </p>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
-            <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">实部</p>
-              <p class="text-lg font-semibold">{{ result.real.toFixed(4) }}</p>
+            <div class="p-3 bg-muted rounded-lg">
+              <p class="text-xs text-muted-foreground mb-1">实部</p>
+              <p class="text-lg font-semibold text-foreground">{{ result.real.toFixed(4) }}</p>
             </div>
-            <div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">虚部</p>
-              <p class="text-lg font-semibold">{{ result.imag.toFixed(4) }}i</p>
+            <div class="p-3 bg-muted rounded-lg">
+              <p class="text-xs text-muted-foreground mb-1">虚部</p>
+              <p class="text-lg font-semibold text-foreground">{{ result.imag.toFixed(4) }}i</p>
             </div>
           </div>
         </div>
 
-        <div v-else class="p-8 text-center text-gray-400">
+        <div v-else class="p-8 text-center text-muted-foreground">
           选择运算查看结果
         </div>
       </div>
 
       <!-- 极坐标形式 -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold mb-4">极坐标形式</h2>
+      <div class="bg-card rounded-xl p-6">
+        <h2 class="text-xl font-semibold mb-4 text-foreground">极坐标形式</h2>
 
         <div class="space-y-4">
           <!-- 复数A -->
-          <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <p class="text-sm font-medium mb-2">复数 A</p>
+          <div class="p-4 bg-muted rounded-lg">
+            <p class="text-sm font-medium mb-2 text-foreground">复数 A</p>
             <div class="grid grid-cols-2 gap-2 text-sm">
               <div>
-                <p class="text-gray-600 dark:text-gray-400">模</p>
-                <p class="font-semibold">{{ modulusA.toFixed(4) }}</p>
+                <p class="text-muted-foreground">模</p>
+                <p class="font-semibold text-foreground">{{ modulusA.toFixed(4) }}</p>
               </div>
               <div>
-                <p class="text-gray-600 dark:text-gray-400">幅角</p>
-                <p class="font-semibold">{{ argumentA.toFixed(4) }} rad</p>
+                <p class="text-muted-foreground">幅角</p>
+                <p class="font-semibold text-foreground">{{ argumentA.toFixed(4) }} rad</p>
               </div>
             </div>
-            <p class="text-sm text-blue-600 dark:text-blue-400 mt-2">
+            <p class="text-sm text-primary mt-2">
               {{ modulusA.toFixed(4) }} × e^({{ argumentA.toFixed(4) }}i)
             </p>
           </div>
 
           <!-- 复数B -->
-          <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-            <p class="text-sm font-medium mb-2">复数 B</p>
+          <div class="p-4 bg-muted rounded-lg">
+            <p class="text-sm font-medium mb-2 text-foreground">复数 B</p>
             <div class="grid grid-cols-2 gap-2 text-sm">
               <div>
-                <p class="text-gray-600 dark:text-gray-400">模</p>
-                <p class="font-semibold">{{ modulusB.toFixed(4) }}</p>
+                <p class="text-muted-foreground">模</p>
+                <p class="font-semibold text-foreground">{{ modulusB.toFixed(4) }}</p>
               </div>
               <div>
-                <p class="text-gray-600 dark:text-gray-400">幅角</p>
-                <p class="font-semibold">{{ argumentB.toFixed(4) }} rad</p>
+                <p class="text-muted-foreground">幅角</p>
+                <p class="font-semibold text-foreground">{{ argumentB.toFixed(4) }} rad</p>
               </div>
             </div>
-            <p class="text-sm text-purple-600 dark:text-purple-400 mt-2">
+            <p class="text-sm text-primary mt-2">
               {{ modulusB.toFixed(4) }} × e^({{ argumentB.toFixed(4) }}i)
             </p>
           </div>
 
           <!-- 结果极坐标 -->
-          <div v-if="result" class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-            <p class="text-sm font-medium mb-2">结果</p>
+          <div v-if="result" class="p-4 bg-muted rounded-lg">
+            <p class="text-sm font-medium mb-2 text-foreground">结果</p>
             <div class="grid grid-cols-2 gap-2 text-sm">
               <div>
-                <p class="text-gray-600 dark:text-gray-400">模</p>
-                <p class="font-semibold">{{ resultModulus.toFixed(4) }}</p>
+                <p class="text-muted-foreground">模</p>
+                <p class="font-semibold text-foreground">{{ resultModulus.toFixed(4) }}</p>
               </div>
               <div>
-                <p class="text-gray-600 dark:text-gray-400">幅角</p>
-                <p class="font-semibold">{{ resultArgument.toFixed(4) }} rad</p>
+                <p class="text-muted-foreground">幅角</p>
+                <p class="font-semibold text-foreground">{{ resultArgument.toFixed(4) }} rad</p>
               </div>
             </div>
-            <p class="text-sm text-green-600 dark:text-green-400 mt-2">
+            <p class="text-sm text-primary mt-2">
               {{ resultModulus.toFixed(4) }} × e^({{ resultArgument.toFixed(4) }}i)
             </p>
           </div>
@@ -176,66 +177,66 @@
     </div>
 
     <!-- 快捷计算 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">单复数计算</h2>
+    <div class="bg-card rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4 text-foreground">单复数计算</h2>
 
       <div class="grid md:grid-cols-2 gap-6">
         <!-- 共轭复数 -->
-        <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <h3 class="font-medium mb-3">共轭复数</h3>
+        <div class="p-4 bg-muted rounded-lg">
+          <h3 class="font-medium mb-3 text-foreground">共轭复数</h3>
           <div class="space-y-2 text-sm">
             <div class="flex justify-between">
-              <span class="text-gray-600 dark:text-gray-400">A 的共轭</span>
-              <span class="font-medium">{{ formatComplex(complexA.real, -complexA.imag) }}</span>
+              <span class="text-muted-foreground">A 的共轭</span>
+              <span class="font-medium text-foreground">{{ formatComplex(complexA.real, -complexA.imag) }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-600 dark:text-gray-400">B 的共轭</span>
-              <span class="font-medium">{{ formatComplex(complexB.real, -complexB.imag) }}</span>
+              <span class="text-muted-foreground">B 的共轭</span>
+              <span class="font-medium text-foreground">{{ formatComplex(complexB.real, -complexB.imag) }}</span>
             </div>
           </div>
         </div>
 
         <!-- 平方根 -->
-        <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <h3 class="font-medium mb-3">平方根</h3>
+        <div class="p-4 bg-muted rounded-lg">
+          <h3 class="font-medium mb-3 text-foreground">平方根</h3>
           <div class="space-y-2 text-sm">
             <div class="flex justify-between">
-              <span class="text-gray-600 dark:text-gray-400">√A</span>
-              <span class="font-medium">{{ sqrtA }}</span>
+              <span class="text-muted-foreground">√A</span>
+              <span class="font-medium text-foreground">{{ sqrtA }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-600 dark:text-gray-400">√B</span>
-              <span class="font-medium">{{ sqrtB }}</span>
+              <span class="text-muted-foreground">√B</span>
+              <span class="font-medium text-foreground">{{ sqrtB }}</span>
             </div>
           </div>
         </div>
 
         <!-- 倒数 -->
-        <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <h3 class="font-medium mb-3">倒数 (1/z)</h3>
+        <div class="p-4 bg-muted rounded-lg">
+          <h3 class="font-medium mb-3 text-foreground">倒数 (1/z)</h3>
           <div class="space-y-2 text-sm">
             <div class="flex justify-between">
-              <span class="text-gray-600 dark:text-gray-400">1/A</span>
-              <span class="font-medium">{{ reciprocalA }}</span>
+              <span class="text-muted-foreground">1/A</span>
+              <span class="font-medium text-foreground">{{ reciprocalA }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-600 dark:text-gray-400">1/B</span>
-              <span class="font-medium">{{ reciprocalB }}</span>
+              <span class="text-muted-foreground">1/B</span>
+              <span class="font-medium text-foreground">{{ reciprocalB }}</span>
             </div>
           </div>
         </div>
 
         <!-- 平方 -->
-        <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <h3 class="font-medium mb-3">平方 (z²)</h3>
+        <div class="p-4 bg-muted rounded-lg">
+          <h3 class="font-medium mb-3 text-foreground">平方 (z²)</h3>
           <div class="space-y-2 text-sm">
             <div class="flex justify-between">
-              <span class="text-gray-600 dark:text-gray-400">A²</span>
-              <span class="font-medium">{{ squareA }}</span>
+              <span class="text-muted-foreground">A²</span>
+              <span class="font-medium text-foreground">{{ squareA }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-gray-600 dark:text-gray-400">B²</span>
-              <span class="font-medium">{{ squareB }}</span>
+              <span class="text-muted-foreground">B²</span>
+              <span class="font-medium text-foreground">{{ squareB }}</span>
             </div>
           </div>
         </div>
@@ -243,28 +244,205 @@
     </div>
 
     <!-- 公式说明 -->
-    <div class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">复数运算公式</h2>
-      <div class="space-y-3 text-sm">
-        <p><strong>加法：</strong> (a + bi) + (c + di) = (a + c) + (b + d)i</p>
-        <p><strong>减法：</strong> (a + bi) - (c + di) = (a - c) + (b - d)i</p>
-        <p><strong>乘法：</strong> (a + bi) × (c + di) = (ac - bd) + (ad + bc)i</p>
-        <p><strong>除法：</strong> (a + bi) ÷ (c + di) = [(ac + bd) + (bc - ad)i] / (c² + d²)</p>
-        <p><strong>模：</strong> |z| = √(a² + b²)</p>
-        <p><strong>幅角：</strong> arg(z) = arctan(b/a)</p>
+    <div class="bg-card rounded-xl p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4 text-foreground">复数运算公式</h2>
+      <div class="space-y-3 text-sm text-muted-foreground">
+        <p><strong class="text-foreground">加法：</strong> (a + bi) + (c + di) = (a + c) + (b + d)i</p>
+        <p><strong class="text-foreground">减法：</strong> (a + bi) - (c + di) = (a - c) + (b - d)i</p>
+        <p><strong class="text-foreground">乘法：</strong> (a + bi) × (c + di) = (ac - bd) + (ad + bc)i</p>
+        <p><strong class="text-foreground">除法：</strong> (a + bi) ÷ (c + di) = [(ac + bd) + (bc - ad)i] / (c² + d²)</p>
+        <p><strong class="text-foreground">模：</strong> |z| = √(a² + b²)</p>
+        <p><strong class="text-foreground">幅角：</strong> arg(z) = arctan(b/a)</p>
       </div>
     </div>
+
+    <!-- SEO 内容长尾区 -->
+    <div class="p-6 mb-12 relative">
+      <!-- 折叠按钮 -->
+      <button
+        @click="toggleSeoContent"
+        class="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+        :title="isSeoContentVisible ? '折叠内容' : '展开内容'"
+      >
+        <HelpCircle v-if="!isSeoContentVisible" class="w-5 h-5" />
+        <ChevronUp v-else class="w-5 h-5" />
+      </button>
+
+      <!-- 内容区域 -->
+      <div v-show="isSeoContentVisible">
+        <h2 class="text-2xl font-bold text-foreground mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          什么是复数？
+        </h2>
+        <p class="text-muted-foreground mb-4">
+          复数是实数的扩展，形式为 a + bi，其中 a 是实部，b 是虚部，i 是虚数单位（满足 i² = -1）。
+          复数在数学、物理、工程等领域有广泛应用，特别是在交流电路分析、信号处理、量子力学等方面。
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          复数的表示方法
+        </h2>
+        <ul class="list-disc list-inside space-y-2 text-muted-foreground mb-6">
+          <li><strong>代数形式</strong>: a + bi，最常用的表示形式</li>
+          <li><strong>极坐标形式</strong>: r(cos θ + i·sin θ)，其中 r 是模，θ 是幅角</li>
+          <li><strong>指数形式</strong>: re^(iθ)，使用欧拉公式表示</li>
+          <li><strong>几何表示</strong>: 在复平面上用点或向量表示</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          复数的运算规则
+        </h2>
+        <ul class="list-disc list-inside space-y-2 text-muted-foreground mb-6">
+          <li><strong>加减法</strong>: 实部与实部相加减，虚部与虚部相加减</li>
+          <li><strong>乘法</strong>: 使用分配律展开，注意 i² = -1</li>
+          <li><strong>除法</strong>: 分子分母同时乘以分母的共轭复数，使分母实数化</li>
+          <li><strong>共轭复数</strong>: 改变虚部的符号，即 a + bi 的共轭为 a - bi</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          复数的应用
+        </h2>
+        <ul class="list-disc list-inside space-y-2 text-muted-foreground mb-6">
+          <li><strong>电气工程</strong>: 交流电路分析，阻抗计算</li>
+          <li><strong>信号处理</strong>: 傅里叶变换，频域分析</li>
+          <li><strong>控制系统</strong>: 传递函数，稳定性分析</li>
+          <li><strong>量子力学</strong>: 波函数，量子态表示</li>
+          <li><strong>流体力学</strong>: 势流理论，复变函数</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          常见问题 (FAQ)
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">什么是虚数单位 i？</h3>
+            <p class="text-muted-foreground mt-1">
+              虚数单位 i 是一个特殊的数，满足 i² = -1。它使得负数也可以开平方根。
+              在实数范围内，负数没有实数平方根，但在复数范围内，-1 的平方根就是 i。
+              虚数单位在工程和物理中非常重要，特别是在交流电路分析中。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">什么是共轭复数？</h3>
+            <p class="text-muted-foreground mt-1">
+              共轭复数是指将复数的虚部符号取反而得到的新复数。例如，a + bi 的共轭复数是 a - bi。
+              共轭复数的一个重要性质是：复数与其共轭复数的乘积等于该复数模的平方，即 (a + bi)(a - bi) = a² + b²。
+              这个性质在复数除法中非常有用，可以用来有理化分母。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">复数的模和幅角是什么？</h3>
+            <p class="text-muted-foreground mt-1">
+              复数的模（也叫绝对值或大小）表示复数在复平面上到原点的距离，计算公式为 |z| = √(a² + b²)。
+              幅角表示复数在复平面上的方向，是复数向量与正实轴的夹角，计算公式为 arg(z) = arctan(b/a)。
+              使用模和幅角可以方便地进行复数的乘除运算，以及极坐标和指数形式的转换。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 相关推荐区 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-foreground mb-4">您可能还需要...</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <NuxtLink
+          v-for="relatedTool in relatedTools"
+          :key="relatedTool.id"
+          :to="`/tools/${relatedTool.id}`"
+          class="block p-4 bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <component
+              :is="iconMap[relatedTool.icon]"
+              class="w-5 h-5 text-primary"
+            />
+            <span class="font-medium text-foreground">{{ relatedTool.name }}</span>
+          </div>
+          <p class="text-sm text-muted-foreground line-clamp-2">{{ relatedTool.description }}</p>
+        </NuxtLink>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { HelpCircle, ChevronUp } from 'lucide-vue-next'
+import { tools } from '~/data/tools'
 
-useHead({
-  title: '复数计算器 - 复数运算工具',
-  meta: [{ name: 'description', content: '在线复数计算器，支持复数加减乘除运算、模幅角计算、极坐标转换、共轭复数计算。适用于数学学习、工程计算等场景。' }],
-  keywords: ['复数计算', '复数运算', '复数加减乘除', '模计算', '幅角计算', '共轭复数', '极坐标']
+// SEO配置
+useSeoMeta({
+  title: '复数计算器 - 复数运算工具 | Util工具箱',
+  description: '在线复数计算器，支持复数加减乘除运算、模幅角计算、极坐标转换、共轭复数计算。适用于数学学习、工程计算等场景。',
+  keywords: '复数计算,复数运算,复数加减乘除,模计算,幅角计算,共轭复数,极坐标,复数计算器',
+  author: 'Util工具箱',
+  ogTitle: '复数计算器 - 复数运算工具',
+  ogDescription: '在线复数计算器，支持复数加减乘除运算、模幅角计算、极坐标转换、共轭复数计算。',
+  ogType: 'website'
 })
+
+// JSON-LD 结构化数据
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebApplication',
+            name: '复数计算器',
+            description: '在线复数计算器，支持复数加减乘除运算',
+            url: 'https://util.cn/tools/complex-number-calculator',
+            applicationCategory: 'EducationalApplication',
+            operatingSystem: 'Any',
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'CNY'
+            },
+            featureList: [
+              '复数加减乘除运算',
+              '模幅角计算',
+              '极坐标转换',
+              '共轭复数计算',
+              '平方根和倒数计算'
+            ]
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: '什么是虚数单位 i？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '虚数单位 i 是一个特殊的数，满足 i² = -1。它使得负数也可以开平方根。在实数范围内，负数没有实数平方根，但在复数范围内，-1 的平方根就是 i。'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: '什么是共轭复数？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '共轭复数是指将复数的虚部符号取反而得到的新复数。例如，a + bi 的共轭复数是 a - bi。共轭复数的一个重要性质是：复数与其共轭复数的乘积等于该复数模的平方。'
+                }
+              }
+            ]
+          }
+        ]
+      })
+    }
+  ]
+})
+
+// SEO内容折叠状态
+const isSeoContentVisible = ref(true)
 
 const complexA = ref({ real: 3, imag: 4 })
 const complexB = ref({ real: 1, imag: 2 })
@@ -418,4 +596,25 @@ function formatComplex(real: number, imag: number): string {
   if (i > 0) return `${r} + ${i}i`
   return `${r} - ${Math.abs(i)}i`
 }
+
+// 切换SEO内容显示状态
+const toggleSeoContent = () => {
+  isSeoContentVisible.value = !isSeoContentVisible.value
+}
+
+// 图标映射
+const iconMap: Record<string, any> = {
+  Calculator: null,
+  Functions: null,
+}
+
+// 相关工具
+const relatedTools = computed(() => {
+  return [
+    tools.find(t => t.id === 'scientific-calculator'),
+    tools.find(t => t.id === 'matrix-calculator'),
+    tools.find(t => t.id === 'vector-calculator'),
+    tools.find(t => t.id === 'statistics-calculator')
+  ].filter(Boolean)
+})
 </script>

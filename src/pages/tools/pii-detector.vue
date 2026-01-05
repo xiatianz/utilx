@@ -256,7 +256,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useSeoMeta } from '#app'
+import { useSeoMeta, useHead } from '#app'
 import {
   Search,
   FileText,
@@ -284,6 +284,9 @@ const piiOptions = [
 ]
 
 const selectedOptionsArray = ref(['idCard', 'phone', 'email', 'bankCard'])
+
+// Convert array to Set for easier checking
+const selectedOptions = computed(() => new Set(selectedOptionsArray.value))
 
 const hasContent = computed(() => inputText.value.trim() || uploadedFile.value)
 

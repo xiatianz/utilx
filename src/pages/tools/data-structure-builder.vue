@@ -1,28 +1,28 @@
 <template>
   <div class="max-w-8xl mx-auto">
-    <!-- 头部 -->
+    <!-- Hero 头部区 -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-3">数据结构构建器</h1>
-      <p class="text-muted-foreground mb-4">可视化构建和操作数据结构，支持树、图、数组等常用数据结构</p>
+      <h1 class="text-3xl font-bold text-foreground mb-3">数据结构构建器 - 可视化构建树和图结构</h1>
+      <p class="text-muted-foreground">可视化构建和操作数据结构，支持树、图、数组、链表等常用数据结构。一键生成多语言代码，纯本地计算，数据隐私绝对安全。</p>
     </div>
 
-    <!-- 工具容器 -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- 工具交互区 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
       <!-- 左侧工具栏 -->
       <div class="space-y-6">
         <!-- 结构类型选择 -->
-        <div class="bg-card rounded-lg p-4">
-          <h3 class="text-lg font-semibold mb-3">数据结构</h3>
+        <div class="bg-card border border-border rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-foreground mb-3">数据结构</h3>
           <div class="grid grid-cols-2 gap-2">
             <button
               v-for="type in structureTypes"
               :key="type.id"
               @click="createStructure(type.id)"
               :class="[
-                'px-3 py-2 rounded text-sm flex flex-col items-center',
+                'px-3 py-2 rounded text-sm flex flex-col items-center transition-colors',
                 currentStructure === type.id
                   ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary hover:bg-secondary/80'
+                  : 'bg-muted hover:bg-muted/80 text-foreground'
               ]"
             >
               <span class="text-lg mb-1">{{ type.icon }}</span>
@@ -32,27 +32,27 @@
         </div>
 
         <!-- 节点操作 -->
-        <div class="bg-card rounded-lg p-4">
-          <h3 class="text-lg font-semibold mb-3">节点操作</h3>
+        <div class="bg-card border border-border rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-foreground mb-3">节点操作</h3>
           <div class="space-y-2">
             <button
               @click="addNode"
               :disabled="!currentStructure"
-              class="w-full px-3 py-2 bg-primary text-primary-foreground rounded text-sm disabled:opacity-50"
+              class="w-full px-3 py-2 bg-primary text-primary-foreground rounded text-sm disabled:opacity-50 hover:bg-primary/90 transition-colors"
             >
               添加节点
             </button>
             <button
               @click="removeNode"
               :disabled="!currentStructure || selectedNodes.length === 0"
-              class="w-full px-3 py-2 bg-destructive text-destructive-foreground rounded text-sm disabled:opacity-50"
+              class="w-full px-3 py-2 bg-destructive text-destructive-foreground rounded text-sm disabled:opacity-50 hover:bg-destructive/90 transition-colors"
             >
               删除节点
             </button>
             <button
               @click="connectNodes"
               :disabled="!currentStructure || selectedNodes.length !== 2"
-              class="w-full px-3 py-2 bg-secondary hover:bg-secondary/80 rounded text-sm disabled:opacity-50"
+              class="w-full px-3 py-2 bg-muted hover:bg-muted/80 text-foreground rounded text-sm disabled:opacity-50 transition-colors"
             >
               连接节点
             </button>
@@ -60,14 +60,14 @@
         </div>
 
         <!-- 预设模板 -->
-        <div class="bg-card rounded-lg p-4">
-          <h3 class="text-lg font-semibold mb-3">预设模板</h3>
+        <div class="bg-card border border-border rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-foreground mb-3">预设模板</h3>
           <div class="space-y-2">
             <button
               v-for="template in templates"
               :key="template.id"
               @click="loadTemplate(template)"
-              class="w-full px-3 py-2 bg-secondary hover:bg-secondary/80 rounded text-sm text-left"
+              class="w-full px-3 py-2 bg-muted hover:bg-muted/80 text-foreground rounded text-sm text-left transition-colors"
             >
               {{ template.name }}
             </button>
@@ -78,38 +78,38 @@
       <!-- 中间可视化区域 -->
       <div class="lg:col-span-2 space-y-6">
         <!-- 可视化画布 -->
-        <div class="bg-card rounded-lg p-4">
+        <div class="bg-card border border-border rounded-lg p-4">
           <div class="flex items-center justify-between mb-3">
-            <h3 class="text-lg font-semibold">可视化画布</h3>
+            <h3 class="text-lg font-semibold text-foreground">可视化画布</h3>
             <div class="flex gap-2">
               <button
                 @click="clearCanvas"
-                class="px-3 py-1 bg-destructive text-destructive-foreground rounded text-sm"
+                class="px-3 py-1 bg-destructive text-destructive-foreground rounded text-sm hover:bg-destructive/90 transition-colors"
               >
                 清空
               </button>
               <button
                 @click="exportCode"
-                class="px-3 py-1 bg-primary text-primary-foreground rounded text-sm"
+                class="px-3 py-1 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors"
               >
                 导出代码
               </button>
             </div>
           </div>
 
-          <div class="border-2 border-dashed border-muted-foreground/20 rounded-lg" style="height: 500px; position: relative;">
+          <div class="border-2 border-dashed border-border rounded-lg" style="height: 500px; position: relative;">
             <svg
               ref="canvasRef"
               width="100%"
               height="100%"
               viewBox="0 0 500 500"
-              class="bg-white"
+              class="bg-background"
               @click="handleCanvasClick"
             >
               <!-- 网格背景 -->
               <defs>
                 <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f0f0f0" stroke-width="1"/>
+                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-width="1" class="text-muted opacity-20"/>
                 </pattern>
               </defs>
               <rect width="100%" height="100%" fill="url(#grid)" />
@@ -125,10 +125,10 @@
 
               <!-- 空状态提示 -->
               <g v-if="!currentStructure">
-                <text x="50%" y="50%" text-anchor="middle" fill="#94a3b8" font-size="18">
+                <text x="50%" y="50%" text-anchor="middle" fill="currentColor" class="fill-muted-foreground" font-size="18">
                   请选择一个数据结构类型开始
                 </text>
-                <text x="50%" y="50%" dy="30" text-anchor="middle" fill="#cbd5e1" font-size="14">
+                <text x="50%" y="50%" dy="30" text-anchor="middle" fill="currentColor" class="fill-muted-foreground/70" font-size="14">
                   点击左侧的树、图、数组等按钮
                 </text>
               </g>
@@ -137,11 +137,11 @@
         </div>
 
         <!-- 代码输出 -->
-        <div class="bg-card rounded-lg p-4">
+        <div class="bg-card border border-border rounded-lg p-4">
           <div class="flex items-center justify-between mb-3">
-            <h3 class="text-lg font-semibold">生成的代码</h3>
+            <h3 class="text-lg font-semibold text-foreground">生成的代码</h3>
             <div class="flex gap-2">
-              <select v-model="outputLanguage" class="px-3 py-1 border rounded text-sm">
+              <select v-model="outputLanguage" class="px-3 py-1 bg-muted border border-border rounded text-sm text-foreground">
                 <option value="javascript">JavaScript</option>
                 <option value="python">Python</option>
                 <option value="java">Java</option>
@@ -149,48 +149,167 @@
               </select>
               <button
                 @click="copyCode"
-                class="px-3 py-1 bg-primary text-primary-foreground rounded text-sm"
+                class="px-3 py-1 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors"
               >
                 复制代码
               </button>
             </div>
           </div>
 
-          <pre class="bg-muted p-4 rounded-md text-sm overflow-x-auto max-h-64 overflow-y-auto"><code>{{ generatedCode }}</code></pre>
+          <pre class="bg-muted p-4 rounded-md text-sm overflow-x-auto max-h-64 overflow-y-auto border border-border"><code>{{ generatedCode }}</code></pre>
         </div>
 
         <!-- 操作说明 -->
-        <div class="bg-card rounded-lg p-4">
-          <h3 class="text-lg font-semibold mb-3">操作说明</h3>
+        <div class="bg-card border border-border rounded-lg p-4">
+          <h3 class="text-lg font-semibold text-foreground mb-3">操作说明</h3>
           <div class="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
             <div>
-              <strong>选择结构:</strong> 点击左侧结构类型创建
+              <strong class="text-foreground">选择结构:</strong> 点击左侧结构类型创建
             </div>
             <div>
-              <strong>添加节点:</strong> 点击画布或使用"添加节点"按钮
+              <strong class="text-foreground">添加节点:</strong> 点击画布或使用"添加节点"按钮
             </div>
             <div>
-              <strong>选择节点:</strong> 点击节点进行选择（按住Ctrl多选）
+              <strong class="text-foreground">选择节点:</strong> 点击节点进行选择（按住Ctrl多选）
             </div>
             <div>
-              <strong>连接节点:</strong> 选中两个节点后点击"连接节点"
+              <strong class="text-foreground">连接节点:</strong> 选中两个节点后点击"连接节点"
             </div>
             <div>
-              <strong>删除节点:</strong> 选中节点后点击"删除节点"
+              <strong class="text-foreground">删除节点:</strong> 选中节点后点击"删除节点"
             </div>
             <div>
-              <strong>编辑属性:</strong> 选中单个节点后在左侧编辑
+              <strong class="text-foreground">编辑属性:</strong> 选中单个节点后在左侧编辑
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- SEO 内容长尾区 -->
+    <div class="p-6 mb-12 bg-card border border-border rounded-lg relative">
+      <!-- 折叠按钮 -->
+      <button
+        @click="toggleSeoContent"
+        class="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+        :title="isSeoContentVisible ? '折叠内容' : '展开内容'"
+      >
+        <HelpCircle v-if="!isSeoContentVisible" class="w-5 h-5" />
+        <ChevronUp v-else class="w-5 h-5" />
+      </button>
+
+      <!-- 内容区域 -->
+      <div v-show="isSeoContentVisible">
+        <h2 class="text-2xl font-bold text-foreground mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          什么是数据结构构建器？
+        </h2>
+        <p class="text-muted-foreground mb-4">
+          数据结构构建器是一款在线可视化工具，帮助开发者理解和使用常见的数据结构。
+          通过直观的图形化界面，您可以轻松创建树、图、数组、链表、栈和队列等数据结构，
+          并实时查看它们的形态和关系。
+        </p>
+        <p class="text-muted-foreground">
+          该工具特别适合学习数据结构与算法的初学者，以及需要快速构建和测试数据结构的开发者。
+          支持导出多种编程语言的代码，包括 JavaScript、Python、Java 和 C++，方便直接集成到您的项目中。
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          如何使用本工具
+        </h2>
+        <ol class="list-decimal list-inside space-y-2 text-muted-foreground mb-6">
+          <li>选择左侧的数据结构类型（树、图、数组、链表等）</li>
+          <li>点击"添加节点"按钮或直接在画布上点击添加节点</li>
+          <li>选中两个节点后点击"连接节点"建立关系</li>
+          <li>选择目标编程语言，查看或导出生成的代码</li>
+          <li>使用预设模板快速加载常见的数据结构示例</li>
+        </ol>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          核心功能特性
+        </h2>
+        <ul class="list-disc list-inside space-y-2 text-muted-foreground mb-6">
+          <li><strong>可视化构建</strong>: 直观的图形界面，实时展示数据结构的形态</li>
+          <li><strong>多种结构</strong>: 支持树、图、数组、链表、栈、队列等常用数据结构</li>
+          <li><strong>代码生成</strong>: 一键生成 JavaScript、Python、Java、C++ 代码</li>
+          <li><strong>预设模板</strong>: 内置二叉树、无向图、链表等常见结构模板</li>
+          <li><strong>本地安全</strong>: 所有操作都在浏览器本地完成，数据不会上传</li>
+          <li><strong>交互操作</strong>: 支持多选节点、连接节点、删除节点等操作</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          常见问题 (FAQ)
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">数据结构构建器是免费的吗？</h3>
+            <p class="text-muted-foreground mt-1">
+              完全免费。本工具采用纯前端技术实现，所有功能都可以免费使用，没有任何隐藏费用或限制。
+              您可以随意创建数据结构、生成代码，无需注册账号。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">生成的代码可以直接使用吗？</h3>
+            <p class="text-muted-foreground mt-1">
+              可以。我们生成的代码遵循各语言的最佳实践，可以直接复制到您的项目中使用。
+              代码包含完整的结构定义和基本操作方法，方便您快速集成。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">支持哪些数据结构？</h3>
+            <p class="text-muted-foreground mt-1">
+              目前支持树（Tree）、图（Graph）、数组（Array）、链表（Linked List）、栈（Stack）和队列（Queue）。
+              我们会持续添加更多数据结构类型，如果您有特殊需求，欢迎反馈。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">我的数据安全吗？</h3>
+            <p class="text-muted-foreground mt-1">
+              绝对安全。所有操作都在您的浏览器本地完成，数据不会上传到任何服务器。
+              我们使用纯前端技术确保您的隐私安全，您可以放心使用。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 相关推荐区 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-foreground mb-4">您可能还需要...</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <NuxtLink
+          v-for="relatedTool in relatedTools"
+          :key="relatedTool.id"
+          :to="`/tools/${relatedTool.id}`"
+          class="block p-4 bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <component
+              :is="iconMap[relatedTool.icon]"
+              class="w-5 h-5 text-primary"
+            />
+            <span class="font-medium text-foreground">{{ relatedTool.name }}</span>
+          </div>
+          <p class="text-sm text-muted-foreground line-clamp-2">{{ relatedTool.description }}</p>
+        </NuxtLink>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useSEO } from '~/composables/useSEO'
+import { useRouter } from 'vue-router'
+import {
+  HelpCircle, ChevronUp,
+  FileJson, Code, Database, GitBranch, Link2, List,
+  Type, Hash, Timer, FileDiff, Shield
+} from 'lucide-vue-next'
+import { tools } from '~/data/tools'
+import { addRecentTool } from '~/composables/useTools'
 import TreeStructure from '~/components/structures/TreeStructure.vue'
 import GraphStructure from '~/components/structures/GraphStructure.vue'
 import ArrayStructure from '~/components/structures/ArrayStructure.vue'
@@ -198,9 +317,114 @@ import LinkedListStructure from '~/components/structures/LinkedListStructure.vue
 import StackStructure from '~/components/structures/StackStructure.vue'
 import QueueStructure from '~/components/structures/QueueStructure.vue'
 
-// 设置SEO
-const { setPageTitle } = useSEO()
-setPageTitle('数据结构构建器 - 可视化构建树和图结构')
+// SEO配置
+useSeoMeta({
+  title: '数据结构构建器 - 可视化构建树和图结构 | Util工具箱',
+  description: '免费在线数据结构构建器，支持可视化构建树、图、数组、链表、栈、队列等常用数据结构。一键生成JavaScript、Python、Java、C++代码，纯本地计算，数据安全隐私。',
+  keywords: '数据结构可视化,树结构,图结构,链表,栈,队列,数据结构生成器,算法可视化,数据结构教程',
+  author: 'Util工具箱',
+  ogTitle: '数据结构构建器 - 可视化构建树和图结构',
+  ogDescription: '专业的数据结构可视化工具，支持树、图、数组、链表等常用数据结构。一键生成多语言代码，纯前端处理，数据安全可靠。',
+  ogImage: 'https://util.cn/images/tools/data-structure-builder.png',
+  ogUrl: 'https://util.cn/tools/data-structure-builder',
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
+  twitterTitle: '数据结构构建器 - 可视化构建树和图结构',
+  twitterDescription: '专业的数据结构可视化工具，支持树、图、数组、链表等常用数据结构。一键生成多语言代码，纯前端处理。',
+  twitterImage: 'https://util.cn/images/tools/data-structure-builder.png'
+})
+
+// JSON-LD 结构化数据
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebApplication',
+            name: '数据结构构建器',
+            description: '免费在线数据结构可视化构建工具',
+            url: 'https://util.cn/tools/data-structure-builder',
+            applicationCategory: 'EducationalApplication',
+            operatingSystem: 'Any',
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'CNY'
+            },
+            featureList: [
+              '可视化数据结构',
+              '支持多种数据结构类型',
+              '生成多语言代码',
+              '预设模板快速开始',
+              '本地安全处理',
+              '交互式操作'
+            ]
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: '首页',
+                item: 'https://util.cn'
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: '工具',
+                item: 'https://util.cn/tools'
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: '数据结构构建器',
+                item: 'https://util.cn/tools/data-structure-builder'
+              }
+            ]
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: '数据结构构建器是免费的吗？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '完全免费。本工具采用纯前端技术实现，所有功能都可以免费使用，没有任何隐藏费用或限制。'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: '生成的代码可以直接使用吗？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '可以。我们生成的代码遵循各语言的最佳实践，可以直接复制到您的项目中使用。'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: '我的数据安全吗？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '绝对安全。所有操作都在您的浏览器本地完成，数据不会上传到任何服务器，确保隐私安全。'
+                }
+              }
+            ]
+          }
+        ]
+      })
+    }
+  ]
+})
+
+const router = useRouter()
+
+// 定义当前工具
+const tool = tools.find(t => t.id === 'data-structure-builder')
 
 // 数据
 const currentStructure = ref('tree')
@@ -209,6 +433,33 @@ const nodes = ref([])
 const edges = ref([])
 const canvasRef = ref(null)
 const outputLanguage = ref('javascript')
+
+// SEO内容折叠状态
+const isSeoContentVisible = ref(true)
+
+// 图标映射
+const iconMap = {
+  FileJson, Code, Database, GitBranch, Link2, List,
+  Type, Hash, Timer, FileDiff, Shield
+}
+
+// 相关工具
+const relatedTools = computed(() => {
+  // 获取相关工具：同一分类下的其他工具 + 推荐工具
+  const sameCategory = tools.filter(t =>
+    t.category === 'developer' && t.id !== 'data-structure-builder'
+  ).slice(0, 3)
+
+  // 添加一些推荐工具
+  const recommended = [
+    tools.find(t => t.id === 'json-formatter'),
+    tools.find(t => t.id === 'code-diff'),
+    tools.find(t => t.id === 'regex-tester'),
+    tools.find(t => t.id === 'color-converter')
+  ].filter(Boolean)
+
+  return [...sameCategory, ...recommended].slice(0, 4)
+})
 
 // 结构类型
 const structureTypes = [
@@ -473,6 +724,11 @@ const getFileExtension = () => {
   }
 }
 
+// 切换SEO内容显示状态
+const toggleSeoContent = () => {
+  isSeoContentVisible.value = !isSeoContentVisible.value
+}
+
 // 代码生成方法
 const generateJavaScriptCode = () => {
   let code = `// ${getStructureName()} 数据结构\n\n`
@@ -635,6 +891,11 @@ const generateCppCode = () => {
 // 支持的数据结构: 树、图、链表、数组等
 // 请选择具体的结构类型来生成对应代码
 `
+}
+
+// 添加到最近使用
+if (tool) {
+  addRecentTool(tool.id)
 }
 
 onMounted(() => {

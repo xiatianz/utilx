@@ -1,25 +1,26 @@
 <template>
-  <div class="max-w-6xl mx-auto p-6">
-    <!-- 工具标题 -->
+  <div class="max-w-8xl mx-auto">
+    <!-- Hero 头部区 -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-2">学期计算器</h1>
-      <p class="text-gray-600 dark:text-gray-400">计算学年、学期起止日期，适用于教学安排、选课规划</p>
+      <h1 class="text-3xl font-bold text-foreground mb-3">学期计算器 - 学年起止日期与学期安排查询</h1>
+      <p class="text-muted-foreground">计算学年、学期起止日期，适用于教学安排、选课规划。支持大学、中学、小学不同学制。</p>
     </div>
 
+    <!-- 工具交互区 -->
     <div class="grid lg:grid-cols-2 gap-6 mb-8">
       <!-- 学年选择 -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+      <div class="bg-card border border-border rounded-xl p-6">
         <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-          <Calendar class="w-5 h-5 text-blue-500" />
+          <Calendar class="w-5 h-5 text-primary" />
           选择学年
         </h2>
 
         <!-- 学年 -->
         <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">学年</label>
+          <label class="block text-sm font-medium text-foreground mb-2">学年</label>
           <select
             v-model="academicYear"
-            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+            class="w-full px-4 py-2 border border-border rounded-lg bg-muted"
             @change="calculateSemesters"
           >
             <option v-for="year in academicYears" :key="year" :value="year">
@@ -30,10 +31,10 @@
 
         <!-- 学校类型 -->
         <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">学校类型</label>
+          <label class="block text-sm font-medium text-foreground mb-2">学校类型</label>
           <select
             v-model="schoolType"
-            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+            class="w-full px-4 py-2 border border-border rounded-lg bg-muted"
             @change="calculateSemesters"
           >
             <option value="university">大学 (两学期制)</option>
@@ -47,17 +48,17 @@
 
         <!-- 快捷操作 -->
         <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">快捷操作</label>
+          <label class="block text-sm font-medium text-foreground mb-2">快捷操作</label>
           <div class="flex flex-wrap gap-2">
             <button
               @click="setCurrentAcademicYear"
-              class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+              class="px-3 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90"
             >
               当前学年
             </button>
             <button
               @click="academicYear = parseInt(academicYear) + 1; calculateSemesters()"
-              class="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-600 rounded hover:bg-gray-300"
+              class="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
             >
               下一学年
             </button>
@@ -65,17 +66,17 @@
         </div>
 
         <!-- 当前学期信息 -->
-        <div v-if="currentSemester" class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-          <div class="text-sm text-green-700 dark:text-green-300 mb-1">当前学期</div>
-          <div class="text-xl font-bold text-green-800 dark:text-green-200">
+        <div v-if="currentSemester" class="p-4 bg-primary/10 rounded-lg">
+          <div class="text-sm text-primary mb-1">当前学期</div>
+          <div class="text-xl font-bold text-foreground">
             {{ currentSemester.name }}
           </div>
-          <div class="text-sm text-green-600 dark:text-green-400 mt-2">
+          <div class="text-sm text-muted-foreground mt-2">
             {{ currentSemester.progress }}% 已完成
           </div>
-          <div class="w-full bg-gray-300 dark:bg-gray-600 rounded-full h-2 mt-2">
+          <div class="w-full bg-muted rounded-full h-2 mt-2">
             <div
-              class="bg-green-500 h-2 rounded-full transition-all"
+              class="bg-primary h-2 rounded-full transition-all"
               :style="{ width: `${currentSemester.progress}%` }"
             ></div>
           </div>
@@ -83,9 +84,9 @@
       </div>
 
       <!-- 学期列表 -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+      <div class="bg-card border border-border rounded-xl p-6">
         <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-          <BookOpen class="w-5 h-5 text-purple-500" />
+          <BookOpen class="w-5 h-5 text-purple-600" />
           学期安排
         </h2>
 
@@ -95,41 +96,41 @@
             :key="index"
             :class="[
               'p-4 border rounded-lg',
-              semester.isCurrent ? 'border-green-400 bg-green-50 dark:bg-green-900/20' : 'border-gray-200 dark:border-gray-700'
+              semester.isCurrent ? 'border-primary bg-primary/10' : 'border-border'
             ]"
           >
             <div class="flex justify-between items-start mb-2">
               <div>
-                <div class="font-medium text-lg">{{ semester.name }}</div>
-                <div class="text-sm text-gray-500">{{ semester.dateRange }}</div>
+                <div class="font-medium text-lg text-foreground">{{ semester.name }}</div>
+                <div class="text-sm text-muted-foreground">{{ semester.dateRange }}</div>
               </div>
-              <div v-if="semester.isCurrent" class="text-xs text-green-600">
+              <div v-if="semester.isCurrent" class="text-xs text-primary">
                 当前学期
               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-2 text-sm">
               <div>
-                <span class="text-gray-600 dark:text-gray-400">开始:</span>
-                <span class="font-medium ml-1">{{ semester.startDate }}</span>
+                <span class="text-muted-foreground">开始:</span>
+                <span class="font-medium ml-1 text-foreground">{{ semester.startDate }}</span>
               </div>
               <div>
-                <span class="text-gray-600 dark:text-gray-400">结束:</span>
-                <span class="font-medium ml-1">{{ semester.endDate }}</span>
+                <span class="text-muted-foreground">结束:</span>
+                <span class="font-medium ml-1 text-foreground">{{ semester.endDate }}</span>
               </div>
               <div>
-                <span class="text-gray-600 dark:text-gray-400">周数:</span>
-                <span class="font-medium ml-1">{{ semester.weeks }}周</span>
+                <span class="text-muted-foreground">周数:</span>
+                <span class="font-medium ml-1 text-foreground">{{ semester.weeks }}周</span>
               </div>
               <div>
-                <span class="text-gray-600 dark:text-gray-400">天数:</span>
-                <span class="font-medium ml-1">{{ semester.days }}天</span>
+                <span class="text-muted-foreground">天数:</span>
+                <span class="font-medium ml-1 text-foreground">{{ semester.days }}天</span>
               </div>
             </div>
 
             <!-- 倒计时 -->
-            <div v-if="semester.isCurrent" class="mt-3 p-2 bg-purple-50 dark:bg-purple-900/20 rounded text-sm">
-              <span class="text-purple-700 dark:text-purple-300">距离结束还有:</span>
+            <div v-if="semester.isCurrent" class="mt-3 p-2 bg-accent rounded text-sm">
+              <span class="text-foreground">距离结束还有:</span>
               <span class="font-bold ml-2">{{ semester.daysRemaining }}天</span>
             </div>
           </div>
@@ -138,168 +139,227 @@
     </div>
 
     <!-- 学年统计 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+    <div class="bg-card border border-border rounded-xl p-6 mb-8">
       <h2 class="text-xl font-semibold mb-4">学年统计</h2>
 
       <div v-if="yearStats" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-center">
-          <div class="text-2xl font-bold text-blue-600">{{ yearStats.totalWeeks }}</div>
-          <div class="text-sm text-gray-600 dark:text-gray-400">总周数</div>
+        <div class="p-4 bg-primary/10 rounded-lg text-center">
+          <div class="text-2xl font-bold text-primary">{{ yearStats.totalWeeks }}</div>
+          <div class="text-sm text-muted-foreground">总周数</div>
         </div>
-        <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-center">
+        <div class="p-4 bg-green-600/10 rounded-lg text-center">
           <div class="text-2xl font-bold text-green-600">{{ yearStats.totalDays }}</div>
-          <div class="text-sm text-gray-600 dark:text-gray-400">总天数</div>
+          <div class="text-sm text-muted-foreground">总天数</div>
         </div>
-        <div class="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-center">
+        <div class="p-4 bg-purple-600/10 rounded-lg text-center">
           <div class="text-2xl font-bold text-purple-600">{{ yearStats.semesters }}</div>
-          <div class="text-sm text-gray-600 dark:text-gray-400">学期数</div>
+          <div class="text-sm text-muted-foreground">学期数</div>
         </div>
-        <div class="p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg text-center">
+        <div class="p-4 bg-orange-600/10 rounded-lg text-center">
           <div class="text-2xl font-bold text-orange-600">{{ yearStats.months }}</div>
-          <div class="text-sm text-gray-600 dark:text-gray-400">月份数</div>
+          <div class="text-sm text-muted-foreground">月份数</div>
         </div>
       </div>
     </div>
 
     <!-- 重要时间节点 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+    <div class="bg-card border border-border rounded-xl p-6 mb-8">
       <h2 class="text-xl font-semibold mb-4">重要时间节点</h2>
 
       <div class="grid md:grid-cols-2 gap-6 text-sm">
         <div>
-          <h3 class="font-medium mb-3">开学与放假</h3>
+          <h3 class="font-medium mb-3 text-foreground">开学与放假</h3>
           <div class="space-y-2">
-            <div class="flex justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded">
-              <span>秋季学期开学:</span>
-              <span class="font-medium">9月1日前后</span>
+            <div class="flex justify-between p-2 bg-muted rounded">
+              <span class="text-muted-foreground">秋季学期开学:</span>
+              <span class="font-medium text-foreground">9月1日前后</span>
             </div>
-            <div class="flex justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded">
-              <span>寒假开始:</span>
-              <span class="font-medium">1月中旬-2月初</span>
+            <div class="flex justify-between p-2 bg-muted rounded">
+              <span class="text-muted-foreground">寒假开始:</span>
+              <span class="font-medium text-foreground">1月中旬-2月初</span>
             </div>
-            <div class="flex justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded">
-              <span>春季学期开学:</span>
-              <span class="font-medium">2月下旬-3月初</span>
+            <div class="flex justify-between p-2 bg-muted rounded">
+              <span class="text-muted-foreground">春季学期开学:</span>
+              <span class="font-medium text-foreground">2月下旬-3月初</span>
             </div>
-            <div class="flex justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded">
-              <span>暑假开始:</span>
-              <span class="font-medium">7月初</span>
+            <div class="flex justify-between p-2 bg-muted rounded">
+              <span class="text-muted-foreground">暑假开始:</span>
+              <span class="font-medium text-foreground">7月初</span>
             </div>
           </div>
         </div>
 
         <div>
-          <h3 class="font-medium mb-3">考试周</h3>
+          <h3 class="font-medium mb-3 text-foreground">考试周</h3>
           <div class="space-y-2">
-            <div class="flex justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded">
-              <span>期末考试周:</span>
-              <span class="font-medium">1月(秋) / 6月(春)</span>
+            <div class="flex justify-between p-2 bg-muted rounded">
+              <span class="text-muted-foreground">期末考试周:</span>
+              <span class="font-medium text-foreground">1月(秋) / 6月(春)</span>
             </div>
-            <div class="flex justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded">
-              <span>高考:</span>
-              <span class="font-medium">6月7-9日</span>
+            <div class="flex justify-between p-2 bg-muted rounded">
+              <span class="text-muted-foreground">高考:</span>
+              <span class="font-medium text-foreground">6月7-9日</span>
             </div>
-            <div class="flex justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded">
-              <span>中考:</span>
-              <span class="font-medium">6月中下旬</span>
+            <div class="flex justify-between p-2 bg-muted rounded">
+              <span class="text-muted-foreground">中考:</span>
+              <span class="font-medium text-foreground">6月中下旬</span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 校历模板 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">大学校历参考</h2>
+    <!-- SEO 内容长尾区 -->
+    <div class="p-6 mb-12 relative">
+      <!-- 折叠按钮 -->
+      <button
+        @click="toggleSeoContent"
+        class="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+        :title="isSeoContentVisible ? '折叠内容' : '展开内容'"
+      >
+        <HelpCircle v-if="!isSeoContentVisible" class="w-5 h-5" />
+        <ChevronUp v-else class="w-5 h-5" />
+      </button>
 
-      <div class="grid md:grid-cols-3 gap-4 text-sm">
-        <div class="p-4 border dark:border-gray-700 rounded-lg">
-          <h3 class="font-medium mb-2 text-blue-600">第一学期 (秋季)</h3>
-          <div class="text-gray-600 dark:text-gray-400 space-y-1">
-            <div>• 开学: 9月初</div>
-            <div>• 国庆放假: 10月1日</div>
-            <div>• 期中考试: 11月</div>
-            <div>• 元旦放假: 1月1日</div>
-            <div>• 期末考试: 1月中</div>
-            <div>• 放寒假: 1月中下旬</div>
+      <!-- 内容区域 -->
+      <div v-show="isSeoContentVisible">
+        <h2 class="text-2xl font-bold text-foreground mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          什么是学期?
+        </h2>
+        <p class="text-muted-foreground mb-4">
+          学年是指学校的教学年度，一般从秋季开始到次年夏季结束。中国的学年通常分为两个学期：第一学期（秋季学期）和第二学期（春季学期）。
+          大学也有三学期制的安排，分别为秋季学期、冬季学期和春季学期。
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          如何使用本工具
+        </h2>
+        <ol class="list-decimal list-inside space-y-2 text-muted-foreground mb-6">
+          <li>选择您要查询的学年</li>
+          <li>选择学校类型（大学、中学、小学等）</li>
+          <li>查看学期安排和起止日期</li>
+          <li>了解当前学期的进度和剩余时间</li>
+        </ol>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          常见问题
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">大学校历有哪些特点?</h3>
+            <p class="text-muted-foreground mt-1">
+              大学校历通常分为两个学期，第一学期从9月初到1月中下旬，第二学期从2月底到7月初。
+              每学期约为20周，包含教学周和考试周。部分大学采用三学期制，每学期约17周。
+            </p>
           </div>
-        </div>
-
-        <div class="p-4 border dark:border-gray-700 rounded-lg">
-          <h3 class="font-medium mb-2 text-green-600">第二学期 (春季)</h3>
-          <div class="text-gray-600 dark:text-gray-400 space-y-1">
-            <div>• 开学: 2月底3月初</div>
-            <div>• 清明放假: 4月</div>
-            <div>• 劳动节放假: 5月</div>
-            <div>• 端午放假: 6月</div>
-            <div>• 期末考试: 6月底7月初</div>
-            <div>• 暑假: 7月-8月</div>
-          </div>
-        </div>
-
-        <div class="p-4 border dark:border-gray-700 rounded-lg">
-          <h3 class="font-medium mb-2 text-purple-600">三学期制</h3>
-          <div class="text-gray-600 dark:text-gray-400 space-y-1">
-            <div>• 秋季学期: 9月-12月</div>
-            <div>• 冬季学期: 1月-4月</div>
-            <div>• 春季学期: 4月-7月</div>
-            <div>• 适用于某些研究生项目</div>
-            <div>• 国际学校常见安排</div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">寒暑假是如何安排的?</h3>
+            <p class="text-muted-foreground mt-1">
+              寒假通常在1月中下旬到2月底，持续约4-5周。暑假在7月初到8月底，持续约7-8周。
+              具体放假时间可能因学校而异，需以各校公布为准。
+            </p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 相关工具 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">相关工具</h2>
-      <div class="grid md:grid-cols-4 gap-4">
-        <NuxtLink to="/tools/date-calculator" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Calendar class="w-8 h-8 text-blue-500 mb-2" />
-          <h3 class="font-medium">日期计算器</h3>
-          <p class="text-sm text-gray-500">日期加减计算</p>
-        </NuxtLink>
-        <NuxtLink to="/tools/countdown-timer" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Timer class="w-8 h-8 text-green-500 mb-2" />
-          <h3 class="font-medium">倒计时器</h3>
-          <p class="text-sm text-gray-500">倒计时工具</p>
-        </NuxtLink>
-        <NuxtLink to="/tools/week-calculator" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <List class="w-8 h-8 text-purple-500 mb-2" />
-          <h3 class="font-medium">周数计算器</h3>
-          <p class="text-sm text-gray-500">计算周数</p>
-        </NuxtLink>
-        <NuxtLink to="/tools/quarter-calculator" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Calculator class="w-8 h-8 text-orange-500 mb-2" />
-          <h3 class="font-medium">季度计算器</h3>
-          <p class="text-sm text-gray-500">季度查询</p>
+    <!-- 相关推荐区 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-foreground mb-4">您可能还需要...</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <NuxtLink
+          v-for="relatedTool in relatedTools"
+          :key="relatedTool.id"
+          :to="`/tools/${relatedTool.id}`"
+          class="block p-4 bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <component
+              :is="iconMap[relatedTool.icon]"
+              class="w-5 h-5 text-primary"
+            />
+            <span class="font-medium text-foreground">{{ relatedTool.name }}</span>
+          </div>
+          <p class="text-sm text-muted-foreground line-clamp-2">{{ relatedTool.description }}</p>
         </NuxtLink>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed } from 'vue'
 import {
   Calendar,
   BookOpen,
   Timer,
   List,
-  Calculator
+  Calculator,
+  HelpCircle,
+  ChevronUp
 } from 'lucide-vue-next'
+import { tools } from '~/data/tools'
 
 // SEO配置
-useHead({
+useSeoMeta({
   title: '学期计算器 - 学年起止日期与学期安排查询',
-  meta: [
+  description: '在线学期计算器，查询学年、学期起止日期，适用于教学安排、选课规划。支持大学、中学、小学不同学制。',
+  keywords: '学期计算,学年安排,校历查询,开学时间,放假时间,在线学期计算器',
+  author: 'Util工具箱',
+  ogTitle: '学期计算器 - 学年起止日期查询',
+  ogDescription: '在线查询学年、学期起止日期，支持多种学制，适用于教学安排和选课规划。',
+  ogType: 'website'
+})
+
+// JSON-LD 结构化数据
+useHead({
+  script: [
     {
-      name: 'description',
-      content: '在线学期计算器，查询学年、学期起止日期，适用于教学安排、选课规划。支持大学、中学、小学不同学制。'
-    },
-    {
-      name: 'keywords',
-      content: '学期计算,学年安排,校历查询,开学时间,放假时间,在线学期计算器'
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebApplication',
+            name: '学期计算器',
+            description: '在线学期计算器，查询学年、学期起止日期',
+            url: 'https://util.cn/tools/semester-calculator',
+            applicationCategory: 'UtilityApplication',
+            operatingSystem: 'Any',
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'CNY'
+            }
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: '首页',
+                item: 'https://util.cn'
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: '工具',
+                item: 'https://util.cn/tools'
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: '学期计算器',
+                item: 'https://util.cn/tools/semester-calculator'
+              }
+            ]
+          }
+        ]
+      })
     }
   ]
 })
@@ -307,9 +367,25 @@ useHead({
 // State
 const academicYear = ref(new Date().getFullYear())
 const schoolType = ref('university')
-const semesters = ref<any[]>([])
-const currentSemester = ref<any>(null)
-const yearStats = ref<any>(null)
+const semesters = ref([])
+const currentSemester = ref(null)
+const yearStats = ref(null)
+
+// SEO内容折叠状态
+const isSeoContentVisible = ref(true)
+
+// 图标映射
+const iconMap = {
+  Calendar, Timer, List, Calculator
+}
+
+// 相关工具
+const relatedTools = [
+  tools.find(t => t.id === 'date-calculator'),
+  tools.find(t => t.id === 'countdown-timer'),
+  tools.find(t => t.id === 'week-calculator'),
+  tools.find(t => t.id === 'quarter-calculator')
+].filter(Boolean)
 
 // 学年列表
 const academicYears = computed(() => {
@@ -402,7 +478,7 @@ function calculateSemesters() {
 }
 
 // 判断是否当前学期
-function isCurrentSemester(start: string, end: string) {
+function isCurrentSemester(start, end) {
   const now = new Date()
   const startDate = new Date(start)
   const endDate = new Date(end)
@@ -422,6 +498,11 @@ function setCurrentAcademicYear() {
     academicYear.value = year
   }
   calculateSemesters()
+}
+
+// 切换SEO内容显示状态
+function toggleSeoContent() {
+  isSeoContentVisible.value = !isSeoContentVisible.value
 }
 
 // 初始化

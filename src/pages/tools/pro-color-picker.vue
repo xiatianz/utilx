@@ -1,14 +1,16 @@
 <template>
-  <div class="max-w-6xl mx-auto p-6">
+  <div class="max-w-8xl mx-auto">
+    <!-- Hero 头部区 -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-2">专业取色器</h1>
-      <p class="text-gray-600 dark:text-gray-400">屏幕取色、HEX/RGB/HSL/HSV格式转换、色彩历史记录</p>
+      <h1 class="text-3xl font-bold text-foreground mb-3">专业取色器 - 在线颜色选择与转换工具</h1>
+      <p class="text-muted-foreground">屏幕取色、HEX/RGB/HSL/HSV格式转换、色彩历史记录。支持实时预览和一键复制。</p>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-6 mb-6">
+    <!-- 工具交互区 -->
+    <div class="grid lg:grid-cols-2 gap-6 mb-8">
       <!-- 取色器 -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold mb-4">取色器</h2>
+      <div class="bg-card border border-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-foreground mb-4">取色器</h2>
         <div class="space-y-4">
           <!-- 颜色输入 -->
           <div class="flex gap-4 items-center">
@@ -17,20 +19,20 @@
                 ref="nativePicker"
                 v-model="hexValue"
                 type="color"
-                class="w-32 h-32 rounded-xl cursor-pointer border-4 border-gray-200 dark:border-gray-600 shadow-lg"
+                class="w-32 h-32 rounded-xl cursor-pointer border-4 border-border shadow-lg"
               >
             </div>
             <div class="flex-1 space-y-3">
               <div>
-                <label class="block text-sm font-medium mb-1">HEX</label>
+                <label class="block text-sm font-medium text-foreground mb-1">HEX</label>
                 <div class="flex gap-2">
                   <input
                     v-model="hexValue"
                     maxlength="7"
-                    class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 font-mono uppercase"
+                    class="flex-1 px-3 py-2 border border-border rounded-lg bg-muted text-foreground font-mono uppercase"
                     @input="updateFromHex"
                   >
-                  <button @click="copyHex" class="px-3 py-2 bg-blue-500 text-white rounded-lg">复制</button>
+                  <button @click="copyHex" class="px-3 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors">复制</button>
                 </div>
               </div>
             </div>
@@ -38,14 +40,14 @@
 
           <!-- 饱和度/亮度选择器 -->
           <div class="space-y-2">
-            <label class="block text-sm font-medium">饱和度 / 亮度</label>
+            <label class="block text-sm font-medium text-foreground">饱和度 / 亮度</label>
             <div
               ref="slCanvas"
               class="h-40 rounded-lg cursor-crosshair relative"
               :style="{
                 background: `
-                  linear-gradient(to top, #000 0%, transparent 100%),
-                  linear-gradient(to right, #fff 0%, transparent 100%),
+                  linear-gradient(to top, rgb(0,0,0) 0%, transparent 100%),
+                  linear-gradient(to right, rgb(255,255,255) 0%, transparent 100%),
                   ${hueColor}
                 `
               }"
@@ -55,7 +57,7 @@
               @mouseleave="stopSLDrag"
             >
               <div
-                class="absolute w-4 h-4 rounded-full border-2 border-white shadow-lg transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                class="absolute w-4 h-4 rounded-full border-2 border-primary-foreground shadow-lg transform -translate-x-1/2 -translate-y-1/2 pointer-events-none"
                 :style="{
                   left: saturation + '%',
                   top: (100 - lightness) + '%',
@@ -67,8 +69,8 @@
 
           <!-- 色相滑块 -->
           <div class="space-y-2">
-            <label class="block text-sm font-medium">色相 (Hue: {{ hue }}°)</label>
-            <div class="relative h-6 rounded-lg overflow-hidden" style="background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);">
+            <label class="block text-sm font-medium text-foreground">色相 (Hue: {{ hue }}°)</label>
+            <div class="relative h-6 rounded-lg overflow-hidden" style="background: linear-gradient(to right, rgb(255,0,0) 0%, rgb(255,255,0) 17%, rgb(0,255,0) 33%, rgb(0,255,255) 50%, rgb(0,0,255) 67%, rgb(255,0,255) 83%, rgb(255,0,0) 100%);">
               <input
                 v-model.number="hue"
                 type="range"
@@ -87,59 +89,59 @@
       </div>
 
       <!-- 颜色值转换 -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold mb-4">颜色值转换</h2>
+      <div class="bg-card border border-border rounded-xl p-6">
+        <h2 class="text-xl font-semibold text-foreground mb-4">颜色值转换</h2>
         <div class="space-y-4">
           <!-- RGB -->
           <div>
-            <label class="block text-sm font-medium mb-1">RGB</label>
+            <label class="block text-sm font-medium text-foreground mb-1">RGB</label>
             <div class="flex gap-2 items-center">
               <span class="text-red-500 font-bold">R</span>
-              <input v-model.number="rgb.r" type="number" min="0" max="255" class="w-20 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" @input="updateFromRgb">
+              <input v-model.number="rgb.r" type="number" min="0" max="255" class="w-20 px-2 py-2 border border-border rounded bg-muted text-foreground" @input="updateFromRgb">
               <span class="text-green-500 font-bold">G</span>
-              <input v-model.number="rgb.g" type="number" min="0" max="255" class="w-20 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" @input="updateFromRgb">
+              <input v-model.number="rgb.g" type="number" min="0" max="255" class="w-20 px-2 py-2 border border-border rounded bg-muted text-foreground" @input="updateFromRgb">
               <span class="text-blue-500 font-bold">B</span>
-              <input v-model.number="rgb.b" type="number" min="0" max="255" class="w-20 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" @input="updateFromRgb">
+              <input v-model.number="rgb.b" type="number" min="0" max="255" class="w-20 px-2 py-2 border border-border rounded bg-muted text-foreground" @input="updateFromRgb">
             </div>
-            <div class="mt-2 font-mono text-sm text-gray-500 dark:text-gray-400">
+            <div class="mt-2 font-mono text-sm text-muted-foreground">
               rgb({{ rgb.r }}, {{ rgb.g }}, {{ rgb.b }})
             </div>
           </div>
 
           <!-- HSL -->
           <div>
-            <label class="block text-sm font-medium mb-1">HSL</label>
+            <label class="block text-sm font-medium text-foreground mb-1">HSL</label>
             <div class="flex gap-2 items-center">
-              <input v-model.number="hsl.h" type="number" min="0" max="360" class="w-20 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" @input="updateFromHsl">
+              <input v-model.number="hsl.h" type="number" min="0" max="360" class="w-20 px-2 py-2 border border-border rounded bg-muted text-foreground" @input="updateFromHsl">
               <span>°</span>
-              <input v-model.number="hsl.s" type="number" min="0" max="100" class="w-20 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" @input="updateFromHsl">
+              <input v-model.number="hsl.s" type="number" min="0" max="100" class="w-20 px-2 py-2 border border-border rounded bg-muted text-foreground" @input="updateFromHsl">
               <span>%</span>
-              <input v-model.number="hsl.l" type="number" min="0" max="100" class="w-20 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" @input="updateFromHsl">
+              <input v-model.number="hsl.l" type="number" min="0" max="100" class="w-20 px-2 py-2 border border-border rounded bg-muted text-foreground" @input="updateFromHsl">
               <span>%</span>
             </div>
-            <div class="mt-2 font-mono text-sm text-gray-500 dark:text-gray-400">
+            <div class="mt-2 font-mono text-sm text-muted-foreground">
               hsl({{ hsl.h }}°, {{ hsl.s }}%, {{ hsl.l }}%)
             </div>
           </div>
 
           <!-- HSV -->
           <div>
-            <label class="block text-sm font-medium mb-1">HSV</label>
+            <label class="block text-sm font-medium text-foreground mb-1">HSV</label>
             <div class="flex gap-2 items-center">
-              <input v-model.number="hsv.h" type="number" min="0" max="360" class="w-20 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" @input="updateFromHsv">
+              <input v-model.number="hsv.h" type="number" min="0" max="360" class="w-20 px-2 py-2 border border-border rounded bg-muted text-foreground" @input="updateFromHsv">
               <span>°</span>
-              <input v-model.number="hsv.s" type="number" min="0" max="100" class="w-20 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" @input="updateFromHsv">
+              <input v-model.number="hsv.s" type="number" min="0" max="100" class="w-20 px-2 py-2 border border-border rounded bg-muted text-foreground" @input="updateFromHsv">
               <span>%</span>
-              <input v-model.number="hsv.v" type="number" min="0" max="100" class="w-20 px-2 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700" @input="updateFromHsv">
+              <input v-model.number="hsv.v" type="number" min="0" max="100" class="w-20 px-2 py-2 border border-border rounded bg-muted text-foreground" @input="updateFromHsv">
               <span>%</span>
             </div>
-            <div class="mt-2 font-mono text-sm text-gray-500 dark:text-gray-400">
+            <div class="mt-2 font-mono text-sm text-muted-foreground">
               hsv({{ hsv.h }}°, {{ hsv.s }}%, {{ hsv.v }}%)
             </div>
           </div>
 
           <!-- 预览 -->
-          <div class="p-4 rounded-lg border-2 border-gray-200 dark:border-gray-600" :style="{ backgroundColor: hexValue }">
+          <div class="p-4 rounded-lg border-2 border-border" :style="{ backgroundColor: hexValue }">
             <div class="flex items-center justify-between">
               <span class="font-mono font-bold text-lg px-3 py-1 rounded" :class="isLight ? 'text-black' : 'text-white'">
                 {{ hexValue }}
@@ -154,14 +156,14 @@
     </div>
 
     <!-- 常用颜色 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
-      <h2 class="text-xl font-semibold mb-4">常用颜色</h2>
+    <div class="bg-card border border-border rounded-xl p-6 mb-8">
+      <h2 class="text-xl font-semibold text-foreground mb-4">常用颜色</h2>
       <div class="grid grid-cols-8 md:grid-cols-12 lg:grid-cols-16 gap-2">
         <button
           v-for="color in commonColors"
           :key="color"
           @click="setColor(color)"
-          class="w-full aspect-square rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:scale-110 hover:border-blue-500 transition"
+          class="w-full aspect-square rounded-lg border-2 border-border hover:scale-110 hover:border-primary transition"
           :style="{ backgroundColor: color }"
           :title="color"
         ></button>
@@ -169,12 +171,12 @@
     </div>
 
     <!-- 历史记录 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+    <div class="bg-card border border-border rounded-xl p-6 mb-8">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">历史记录</h2>
-        <button @click="clearHistory" class="px-3 py-1 text-sm bg-red-500 text-white rounded">清空</button>
+        <h2 class="text-xl font-semibold text-foreground">历史记录</h2>
+        <button @click="clearHistory" class="px-3 py-1 text-sm bg-destructive text-destructive-foreground rounded">清空</button>
       </div>
-      <div v-if="colorHistory.length === 0" class="text-center py-8 text-gray-400">
+      <div v-if="colorHistory.length === 0" class="text-center py-8 text-muted-foreground">
         暂无历史记录
       </div>
       <div v-else class="grid grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2">
@@ -182,7 +184,7 @@
           v-for="(color, index) in colorHistory"
           :key="index"
           @click="setColor(color)"
-          class="w-full aspect-square rounded-lg border-2 border-gray-200 dark:border-gray-600 hover:scale-110 hover:border-blue-500 transition relative group"
+          class="w-full aspect-square rounded-lg border-2 border-border hover:scale-110 hover:border-primary transition relative group"
           :style="{ backgroundColor: color }"
         >
           <span class="absolute inset-0 flex items-center justify-center text-xs font-mono font-bold opacity-0 group-hover:opacity-100 transition" :class="isLightColor(color) ? 'text-black' : 'text-white'">
@@ -191,17 +193,191 @@
         </button>
       </div>
     </div>
+
+    <!-- SEO 内容长尾区 -->
+    <div class="p-6 mb-12 relative bg-card border border-border">
+      <!-- 折叠按钮 -->
+      <button
+        @click="toggleSeoContent"
+        class="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+        :title="isSeoContentVisible ? '折叠内容' : '展开内容'"
+      >
+        <HelpCircle v-if="!isSeoContentVisible" class="w-5 h-5" />
+        <ChevronUp v-else class="w-5 h-5" />
+      </button>
+
+      <!-- 内容区域 -->
+      <div v-show="isSeoContentVisible">
+        <h2 class="text-2xl font-bold text-foreground mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          什么是颜色格式？
+        </h2>
+        <p class="text-muted-foreground mb-4">
+          在网页设计和开发中，有多种颜色格式可供选择。每种格式都有其特点和适用场景。
+          了解不同颜色格式之间的转换和用途，对于设计师和开发者来说都非常重要。
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          常用颜色格式
+        </h2>
+        <ul class="list-disc list-inside space-y-2 text-muted-foreground mb-6">
+          <li><strong>HEX</strong>: 十六进制格式，如 #FF5733。最常用的网页颜色格式</li>
+          <li><strong>RGB</strong>: 红绿蓝格式，如 rgb(255, 87, 51)。使用三个0-255的数值表示颜色</li>
+          <li><strong>HSL</strong>: 色相、饱和度、亮度格式，如 hsl(11, 100%, 60%)。更直观的颜色调整方式</li>
+          <li><strong>HSV</strong>: 色相、饱和度、明度格式，如 hsv(11, 100%, 100%)。常用于色彩选择器</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          如何使用本工具
+        </h2>
+        <ol class="list-decimal list-inside space-y-2 text-muted-foreground mb-6">
+          <li>使用颜色选择器选择颜色，或直接输入HEX值</li>
+          <li>调整饱和度、亮度和色相滑块来微调颜色</li>
+          <li>查看RGB、HSL、HSV格式的实时转换结果</li>
+          <li>点击"复制"按钮快速复制颜色代码</li>
+          <li>保存常用颜色到历史记录，方便日后使用</li>
+        </ol>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          常见问题 (FAQ)
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">HEX 和 RGB 有什么区别？</h3>
+            <p class="text-muted-foreground mt-1">
+              HEX 是十六进制格式，更简洁，适合在代码中使用；RGB 是十进制格式，更直观，适合程序处理。
+              两者可以相互转换，表示相同的颜色。HEX 格式如 #FF5733，对应的 RGB 格式是 rgb(255, 87, 51)。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">HSL 和 RGB 有什么区别？</h3>
+            <p class="text-muted-foreground mt-1">
+              HSL 使用色相、饱和度、亮度来描述颜色，更符合人类对颜色的感知方式；
+              RGB 使用红、绿、蓝三个通道的强度来描述颜色，更符合显示器的工作原理。
+              HSL 更适合调整颜色的色调和明暗，而 RGB 更适合精确控制颜色值。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">如何选择合适的颜色格式？</h3>
+            <p class="text-muted-foreground mt-1">
+              一般情况下，HEX 格式是最常用的选择，因为它简洁且广泛支持。
+              如果需要动态调整颜色，HSL 格式会更方便。如果需要程序化处理颜色，RGB 格式更合适。
+              在CSS中，所有这些格式都可以直接使用。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 相关推荐区 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-foreground mb-4">您可能还需要...</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <NuxtLink
+          v-for="relatedTool in relatedTools"
+          :key="relatedTool.id"
+          :to="`/tools/${relatedTool.id}`"
+          class="block p-4 bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <component
+              :is="iconMap[relatedTool.icon]"
+              class="w-5 h-5 text-primary"
+            />
+            <span class="font-medium text-foreground">{{ relatedTool.name }}</span>
+          </div>
+          <p class="text-sm text-muted-foreground line-clamp-2">{{ relatedTool.description }}</p>
+        </NuxtLink>
+      </div>
+    </section>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed, watch } from 'vue'
+import { HelpCircle, ChevronUp, Box, Palette, Layers, Droplets } from 'lucide-vue-next'
+import { tools } from '~/data/tools'
 
-useHead({
-  title: '专业取色器 - 在线颜色选择与转换',
-  meta: [{ name: 'description', content: '在线专业取色工具，支持屏幕取色、HEX/RGB/HSL/HSV格式转换，提供颜色历史记录功能。' }],
-  keywords: ['取色器', '颜色选择', 'HEX转换', 'RGB转换', 'HSL转换', 'HSV转换', '色彩工具']
+// SEO配置
+useSeoMeta({
+  title: '专业取色器 - 在线颜色选择与转换工具 | Util工具箱',
+  description: '在线专业取色工具，支持屏幕取色、HEX/RGB/HSL/HSV格式转换，提供颜色历史记录功能。',
+  keywords: '取色器,颜色选择,HEX转换,RGB转换,HSL转换,HSV转换,色彩工具',
+  author: 'Util工具箱',
+  ogTitle: '专业取色器 - 在线颜色选择与转换',
+  ogDescription: '专业的在线取色工具，支持多种颜色格式转换和历史记录功能。',
+  ogImage: 'https://util.cn/images/tools/pro-color-picker.png',
+  ogUrl: 'https://util.cn/tools/pro-color-picker',
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
+  twitterTitle: '专业取色器 - 在线颜色选择与转换',
+  twitterDescription: '专业的在线取色工具，支持多种颜色格式转换和历史记录功能。',
+  twitterImage: 'https://util.cn/images/tools/pro-color-picker.png'
 })
+
+// JSON-LD 结构化数据
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebApplication',
+            name: '专业取色器',
+            description: '在线颜色选择与转换工具',
+            url: 'https://util.cn/tools/pro-color-picker',
+            applicationCategory: 'DeveloperApplication',
+            operatingSystem: 'Any',
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'CNY'
+            },
+            featureList: [
+              '多种颜色格式',
+              '实时转换',
+              '颜色历史',
+              '常用颜色',
+              '可视化选择',
+              '一键复制'
+            ]
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: '首页',
+                item: 'https://util.cn'
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: '工具',
+                item: 'https://util.cn/tools'
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: '专业取色器',
+                item: 'https://util.cn/tools/pro-color-picker'
+              }
+            ]
+          }
+        ]
+      })
+    }
+  ]
+})
+
+// SEO内容折叠状态
+const isSeoContentVisible = ref(true)
 
 const hexValue = ref('#3B82F6')
 const hue = ref(217)
@@ -212,7 +388,7 @@ const rgb = ref({ r: 59, g: 130, b: 246 })
 const hsl = ref({ h: 217, s: 91, l: 60 })
 const hsv = ref({ h: 217, s: 76, v: 96 })
 
-const slCanvas = ref<HTMLElement>()
+const slCanvas = ref()
 const isDragging = ref(false)
 
 const commonColors = [
@@ -222,10 +398,25 @@ const commonColors = [
   '#2E8B57', '#4682B4', '#FF6347', '#7B68EE', '#00CED1', '#FF1493', '#1E90FF', '#FFDAB9'
 ]
 
-const colorHistory = ref<string[]>([])
+const colorHistory = ref([])
+
+// 图标映射
+const iconMap = {
+  Box, Palette, Layers, Droplets
+}
+
+// 相关工具
+const relatedTools = computed(() => {
+  return [
+    tools.find(t => t.id === 'border-radius-generator'),
+    tools.find(t => t.id === 'css-filter-generator'),
+    tools.find(t => t.id === 'backdrop-filter-generator'),
+    tools.find(t => t.id === 'transform-generator')
+  ].filter(Boolean)
+})
 
 const hueColor = computed(() => {
-  return `hsl(${hue.value}, 100%, 50%)`
+  return `rgb(${hue.value}, 100%, 50%)`
 })
 
 const isLight = computed(() => {
@@ -236,14 +427,14 @@ watch([hue, saturation, lightness], () => {
   updateAllFormats()
 })
 
-function hexToRgb(hex: string): { r: number, g: number, b: number } {
+function hexToRgb(hex) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
   return result
     ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) }
     : { r: 0, g: 0, b: 0 }
 }
 
-function rgbToHsl(r: number, g: number, b: number): { h: number, s: number, l: number } {
+function rgbToHsl(r, g, b) {
   r /= 255
   g /= 255
   b /= 255
@@ -274,7 +465,7 @@ function rgbToHsl(r: number, g: number, b: number): { h: number, s: number, l: n
   return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) }
 }
 
-function rgbToHsv(r: number, g: number, b: number): { h: number, s: number, v: number } {
+function rgbToHsv(r, g, b) {
   r /= 255
   g /= 255
   b /= 255
@@ -303,7 +494,7 @@ function rgbToHsv(r: number, g: number, b: number): { h: number, s: number, v: n
   return { h: Math.round(h * 360), s: Math.round(s * 100), v: Math.round(v * 100) }
 }
 
-function hslToRgb(h: number, s: number, l: number): { r: number, g: number, b: number } {
+function hslToRgb(h, s, l) {
   s /= 100
   l /= 100
 
@@ -328,12 +519,12 @@ function hslToRgb(h: number, s: number, l: number): { r: number, g: number, b: n
   }
 }
 
-function rgbToHex(r: number, g: number, b: number): string {
-  const toHex = (n: number) => n.toString(16).padStart(2, '0').toUpperCase()
+function rgbToHex(r, g, b) {
+  const toHex = (n) => n.toString(16).padStart(2, '0').toUpperCase()
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
 
-function hsvToRgb(h: number, s: number, v: number): { r: number, g: number, b: number } {
+function hsvToRgb(h, s, v) {
   s /= 100
   v /= 100
 
@@ -359,10 +550,10 @@ function hsvToRgb(h: number, s: number, v: number): { r: number, g: number, b: n
 }
 
 function updateFromHex() {
-  const rgb = hexToRgb(hexValue.value)
-  rgb.value = rgb
-  const hslValue = rgbToHsl(rgb.r, rgb.g, rgb.b)
-  const hsvValue = rgbToHsv(rgb.r, rgb.g, rgb.b)
+  const rgbValue = hexToRgb(hexValue.value)
+  rgb.value = rgbValue
+  const hslValue = rgbToHsl(rgbValue.r, rgbValue.g, rgbValue.b)
+  const hsvValue = rgbToHsv(rgbValue.r, rgbValue.g, rgbValue.b)
 
   hsl.value = hslValue
   hsv.value = hsvValue
@@ -408,12 +599,12 @@ function updateAllFormats() {
   hexValue.value = rgbToHex(rgbValue.r, rgbValue.g, rgbValue.b)
 }
 
-function startSLDrag(e: MouseEvent) {
+function startSLDrag(e) {
   isDragging.value = true
   updateSLFromMouse(e)
 }
 
-function onSLDrag(e: MouseEvent) {
+function onSLDrag(e) {
   if (!isDragging.value) return
   updateSLFromMouse(e)
 }
@@ -422,7 +613,7 @@ function stopSLDrag() {
   isDragging.value = false
 }
 
-function updateSLFromMouse(e: MouseEvent) {
+function updateSLFromMouse(e) {
   if (!slCanvas.value) return
   const rect = slCanvas.value.getBoundingClientRect()
   saturation.value = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100))
@@ -430,12 +621,12 @@ function updateSLFromMouse(e: MouseEvent) {
   updateAllFormats()
 }
 
-function setColor(color: string) {
+function setColor(color) {
   hexValue.value = color
   updateFromHex()
 }
 
-function isLightColor(hex: string): boolean {
+function isLightColor(hex) {
   const { l } = rgbToHsl(...Object.values(hexToRgb(hex)))
   return l > 50
 }
@@ -459,6 +650,10 @@ async function copyHex() {
     await navigator.clipboard.writeText(hexValue.value)
     alert(`已复制: ${hexValue.value}`)
   } catch {}
+}
+
+function toggleSeoContent() {
+  isSeoContentVisible.value = !isSeoContentVisible.value
 }
 
 // 初始化

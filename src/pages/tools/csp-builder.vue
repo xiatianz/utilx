@@ -390,7 +390,7 @@
               <p class="font-medium text-foreground mb-1">实施建议</p>
               <ul class="list-disc list-inside space-y-1 ml-2">
                 <li>从<code class="text-xs">'self'</code>开始，逐步添加需要的源</li>
-                <li>使用<a href="/tools/report-uri">Report-URI</a>收集违规报告</li>
+                <li>使用<a href="#">Report-URI</a>收集违规报告</li>
                 <li>在测试环境先启用report-only模式</li>
                 <li>定期审查和更新CSP策略</li>
               </ul>
@@ -429,7 +429,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useSeoMeta } from '#app'
+import { useSeoMeta, useHead } from '#app'
 import {
   Shield,
   Code,
@@ -593,7 +593,7 @@ const nuxtConfig = computed(() => {
 
 // 解析的策略预览
 const parsedPolicy = computed(() => {
-  const policy = {
+  const result = {
     'default-src': [],
     'script-src': [],
     'style-src': [],
@@ -608,12 +608,12 @@ const parsedPolicy = computed(() => {
   const parts = policy.value.split(';').map(p => p.trim())
   parts.forEach(part => {
     const [directive, ...sources] = part.split(/\s+/)
-    if (policy[directive]) {
-      policy[directive] = sources.join(' ')
+    if (result[directive]) {
+      result[directive] = sources.join(' ')
     }
   })
 
-  return policy
+  return result
 })
 
 // 快速预设

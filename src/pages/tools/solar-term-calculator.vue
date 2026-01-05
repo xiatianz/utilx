@@ -1,24 +1,25 @@
 <template>
-  <div class="max-w-6xl mx-auto p-6">
-    <!-- 工具标题 -->
+  <div class="max-w-8xl mx-auto">
+    <!-- Hero 头部区 -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-2">二十四节气查询工具</h1>
-      <p class="text-gray-600 dark:text-gray-400">查询二十四节气日期时间，了解中国传统农耕文化</p>
+      <h1 class="text-3xl font-bold text-foreground mb-3">二十四节气查询工具 - 中国传统节气日期查询</h1>
+      <p class="text-muted-foreground">查询二十四节气日期时间，了解中国传统农耕文化。显示当前节气和下一个节气。</p>
     </div>
 
+    <!-- 工具交互区 -->
     <div class="grid lg:grid-cols-2 gap-6 mb-8">
       <!-- 年份查询 -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+      <div class="bg-card border border-border rounded-xl p-6">
         <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-          <Sun class="w-5 h-5 text-yellow-500" />
+          <Sun class="w-5 h-5 text-yellow-600" />
           按年份查询
         </h2>
 
         <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">选择年份</label>
+          <label class="block text-sm font-medium text-foreground mb-2">选择年份</label>
           <select
             v-model="selectedYear"
-            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+            class="w-full px-4 py-2 border border-border rounded-lg bg-muted"
             @change="calculateSolarTerms"
           >
             <option v-for="y in years" :key="y" :value="y">{{ y }}年</option>
@@ -26,23 +27,23 @@
         </div>
 
         <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">快捷选择</label>
+          <label class="block text-sm font-medium text-foreground mb-2">快捷选择</label>
           <div class="flex flex-wrap gap-2">
             <button
               @click="selectedYear = new Date().getFullYear(); calculateSolarTerms()"
-              class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+              class="px-3 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90"
             >
               今年
             </button>
             <button
               @click="selectedYear = new Date().getFullYear() + 1; calculateSolarTerms()"
-              class="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-600 rounded hover:bg-gray-300"
+              class="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
             >
               明年
             </button>
             <button
               @click="selectedYear = new Date().getFullYear() - 1; calculateSolarTerms()"
-              class="px-3 py-1 text-sm bg-gray-200 dark:bg-gray-600 rounded hover:bg-gray-300"
+              class="px-3 py-1 text-sm bg-muted rounded hover:bg-muted/80"
             >
               去年
             </button>
@@ -50,23 +51,23 @@
         </div>
 
         <!-- 当前节气 -->
-        <div v-if="currentTerm" class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-          <div class="text-sm text-yellow-700 dark:text-yellow-300 mb-1">当前节气</div>
-          <div class="text-2xl font-bold text-yellow-800 dark:text-yellow-200">
+        <div v-if="currentTerm" class="p-4 bg-yellow-500/10 rounded-lg">
+          <div class="text-sm text-yellow-600 mb-1">当前节气</div>
+          <div class="text-2xl font-bold text-foreground">
             {{ currentTerm.name }}
           </div>
-          <div class="text-sm text-yellow-600 dark:text-yellow-400 mt-1">
+          <div class="text-sm text-muted-foreground mt-1">
             {{ currentTerm.date }}
           </div>
         </div>
 
         <!-- 下一个节气 -->
-        <div v-if="nextTerm" class="mt-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-          <div class="text-sm text-green-700 dark:text-green-300 mb-1">下一个节气</div>
-          <div class="text-xl font-bold text-green-800 dark:text-green-200">
+        <div v-if="nextTerm" class="mt-4 p-4 bg-green-600/10 rounded-lg">
+          <div class="text-sm text-green-600 mb-1">下一个节气</div>
+          <div class="text-xl font-bold text-foreground">
             {{ nextTerm.name }}
           </div>
-          <div class="text-sm text-green-600 dark:text-green-400 mt-1">
+          <div class="text-sm text-muted-foreground mt-1">
             {{ nextTerm.date }}
           </div>
           <div class="text-xs text-green-500 mt-1">
@@ -76,9 +77,9 @@
       </div>
 
       <!-- 二十四节气表 -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+      <div class="bg-card border border-border rounded-xl p-6">
         <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-          <Calendar class="w-5 h-5 text-green-500" />
+          <Calendar class="w-5 h-5 text-green-600" />
           {{ selectedYear }}年二十四节气
         </h2>
 
@@ -88,16 +89,16 @@
             :key="index"
             :class="[
               'p-3 border rounded-lg text-sm',
-              term.isCurrent ? 'border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20' : 'border-gray-200 dark:border-gray-700'
+              term.isCurrent ? 'border-yellow-500 bg-yellow-500/10' : 'border-border'
             ]"
           >
             <div class="flex justify-between items-start">
               <div>
-                <div class="font-medium">{{ term.name }}</div>
-                <div class="text-xs text-gray-500 mt-1">{{ term.meaning }}</div>
+                <div class="font-medium text-foreground">{{ term.name }}</div>
+                <div class="text-xs text-muted-foreground mt-1">{{ term.meaning }}</div>
               </div>
               <div class="text-right">
-                <div class="font-mono text-sm">{{ term.date }}</div>
+                <div class="font-mono text-sm text-foreground">{{ term.date }}</div>
                 <div v-if="term.isCurrent" class="text-xs text-yellow-600 mt-1">当前</div>
               </div>
             </div>
@@ -107,7 +108,7 @@
     </div>
 
     <!-- 节气详情 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+    <div class="bg-card border border-border rounded-xl p-6 mb-8">
       <h2 class="text-xl font-semibold mb-4">二十四节气详解</h2>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
@@ -115,10 +116,10 @@
         <div>
           <h3 class="font-medium mb-3 text-green-600">春季节气</h3>
           <div class="space-y-2">
-            <div v-for="term in springTerms" :key="term.name" class="p-2 bg-green-50 dark:bg-green-900/20 rounded">
-              <div class="font-medium">{{ term.name }}</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">{{ term.meaning }}</div>
-              <div class="text-xs text-gray-500 mt-1">{{ term.custom }}</div>
+            <div v-for="term in springTerms" :key="term.name" class="p-2 bg-green-600/10 rounded">
+              <div class="font-medium text-foreground">{{ term.name }}</div>
+              <div class="text-xs text-muted-foreground">{{ term.meaning }}</div>
+              <div class="text-xs text-muted-foreground mt-1">{{ term.custom }}</div>
             </div>
           </div>
         </div>
@@ -127,10 +128,10 @@
         <div>
           <h3 class="font-medium mb-3 text-red-600">夏季节气</h3>
           <div class="space-y-2">
-            <div v-for="term in summerTerms" :key="term.name" class="p-2 bg-red-50 dark:bg-red-900/20 rounded">
-              <div class="font-medium">{{ term.name }}</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">{{ term.meaning }}</div>
-              <div class="text-xs text-gray-500 mt-1">{{ term.custom }}</div>
+            <div v-for="term in summerTerms" :key="term.name" class="p-2 bg-red-600/10 rounded">
+              <div class="font-medium text-foreground">{{ term.name }}</div>
+              <div class="text-xs text-muted-foreground">{{ term.meaning }}</div>
+              <div class="text-xs text-muted-foreground mt-1">{{ term.custom }}</div>
             </div>
           </div>
         </div>
@@ -139,10 +140,10 @@
         <div>
           <h3 class="font-medium mb-3 text-orange-600">秋季节气</h3>
           <div class="space-y-2">
-            <div v-for="term in autumnTerms" :key="term.name" class="p-2 bg-orange-50 dark:bg-orange-900/20 rounded">
-              <div class="font-medium">{{ term.name }}</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">{{ term.meaning }}</div>
-              <div class="text-xs text-gray-500 mt-1">{{ term.custom }}</div>
+            <div v-for="term in autumnTerms" :key="term.name" class="p-2 bg-orange-600/10 rounded">
+              <div class="font-medium text-foreground">{{ term.name }}</div>
+              <div class="text-xs text-muted-foreground">{{ term.meaning }}</div>
+              <div class="text-xs text-muted-foreground mt-1">{{ term.custom }}</div>
             </div>
           </div>
         </div>
@@ -151,93 +152,159 @@
         <div>
           <h3 class="font-medium mb-3 text-blue-600">冬季节气</h3>
           <div class="space-y-2">
-            <div v-for="term in winterTerms" :key="term.name" class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded">
-              <div class="font-medium">{{ term.name }}</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">{{ term.meaning }}</div>
-              <div class="text-xs text-gray-500 mt-1">{{ term.custom }}</div>
+            <div v-for="term in winterTerms" :key="term.name" class="p-2 bg-blue-600/10 rounded">
+              <div class="font-medium text-foreground">{{ term.name }}</div>
+              <div class="text-xs text-muted-foreground">{{ term.meaning }}</div>
+              <div class="text-xs text-muted-foreground mt-1">{{ term.custom }}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 节气知识 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-      <h2 class="text-xl font-semibold mb-4">节气知识</h2>
+    <!-- SEO 内容长尾区 -->
+    <div class="p-6 mb-12 relative">
+      <!-- 折叠按钮 -->
+      <button
+        @click="toggleSeoContent"
+        class="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+        :title="isSeoContentVisible ? '折叠内容' : '展开内容'"
+      >
+        <HelpCircle v-if="!isSeoContentVisible" class="w-5 h-5" />
+        <ChevronUp v-else class="w-5 h-5" />
+      </button>
 
-      <div class="grid md:grid-cols-2 gap-6 text-sm">
-        <div>
-          <h3 class="font-medium mb-3">什么是节气？</h3>
-          <div class="text-gray-600 dark:text-gray-400 space-y-2">
-            <p>二十四节气是中国古代订立的一种用来指导农事的补充历法，根据地球在黄道（即地球绕太阳公转的轨道）上的位置来划分。</p>
-            <p>春秋时期制定出仲春、仲夏、仲秋、仲冬四个节气，到秦汉年间，二十四节气已完全确立。</p>
-            <p>2016年11月30日，二十四节气被正式列入联合国教科文组织人类非物质文化遗产代表作名录。</p>
+      <!-- 内容区域 -->
+      <div v-show="isSeoContentVisible">
+        <h2 class="text-2xl font-bold text-foreground mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          什么是二十四节气?
+        </h2>
+        <p class="text-muted-foreground mb-4">
+          二十四节气是中国古代订立的一种用来指导农事的补充历法，根据地球在黄道（即地球绕太阳公转的轨道）上的位置来划分。
+          春秋时期制定出仲春、仲夏、仲秋、仲冬四个节气，到秦汉年间，二十四节气已完全确立。
+          2016年11月30日，二十四节气被正式列入联合国教科文组织人类非物质文化遗产代表作名录。
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          节气歌
+        </h2>
+        <div class="bg-muted p-4 rounded-lg font-mono text-xs mb-6">
+          <div class="text-foreground">春雨惊春清谷天，夏满芒夏暑相连，</div>
+          <div class="text-foreground">秋处露秋寒霜降，冬雪雪冬小大寒。</div>
+          <div class="mt-2 text-muted-foreground">
+            每句包含一个季节的六个节气
           </div>
         </div>
 
-        <div>
-          <h3 class="font-medium mb-3">节气歌</h3>
-          <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg font-mono text-xs">
-            <div>春雨惊春清谷天，夏满芒夏暑相连，</div>
-            <div>秋处露秋寒霜降，冬雪雪冬小大寒。</div>
-            <div class="mt-2 text-gray-500">
-              每句包含一个季节的六个节气
-            </div>
-          </div>
-        </div>
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          如何使用本工具
+        </h2>
+        <ol class="list-decimal list-inside space-y-2 text-muted-foreground">
+          <li>选择要查询的年份</li>
+          <li>查看该年份的二十四节气日期</li>
+          <li>了解当前所处的节气</li>
+          <li>查看下一个节气的倒计时</li>
+        </ol>
       </div>
     </div>
 
-    <!-- 相关工具 -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">相关工具</h2>
-      <div class="grid md:grid-cols-4 gap-4">
-        <NuxtLink to="/tools/lunar-calendar" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Moon class="w-8 h-8 text-blue-500 mb-2" />
-          <h3 class="font-medium">农历日历</h3>
-          <p class="text-sm text-gray-500">公历农历转换</p>
-        </NuxtLink>
-        <NuxtLink to="/tools/date-calculator" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Calendar class="w-8 h-8 text-green-500 mb-2" />
-          <h3 class="font-medium">日期计算器</h3>
-          <p class="text-sm text-gray-500">日期加减计算</p>
-        </NuxtLink>
-        <NuxtLink to="/tools/quarter-calculator" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Calculator class="w-8 h-8 text-purple-500 mb-2" />
-          <h3 class="font-medium">季度计算器</h3>
-          <p class="text-sm text-gray-500">季度查询</p>
-        </NuxtLink>
-        <NuxtLink to="/tools/holiday-calculator" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Gift class="w-8 h-8 text-red-500 mb-2" />
-          <h3 class="font-medium">节假日查询</h3>
-          <p class="text-sm text-gray-500">法定节假日</p>
+    <!-- 相关推荐区 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-foreground mb-4">您可能还需要...</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <NuxtLink
+          v-for="relatedTool in relatedTools"
+          :key="relatedTool.id"
+          :to="`/tools/${relatedTool.id}`"
+          class="block p-4 bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <component
+              :is="iconMap[relatedTool.icon]"
+              class="w-5 h-5 text-primary"
+            />
+            <span class="font-medium text-foreground">{{ relatedTool.name }}</span>
+          </div>
+          <p class="text-sm text-muted-foreground line-clamp-2">{{ relatedTool.description }}</p>
         </NuxtLink>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed } from 'vue'
 import {
   Sun,
   Calendar,
   Moon,
   Calculator,
-  Gift
+  Gift,
+  HelpCircle,
+  ChevronUp
 } from 'lucide-vue-next'
+import { tools } from '~/data/tools'
 
 // SEO配置
-useHead({
+useSeoMeta({
   title: '二十四节气查询工具 - 中国传统节气日期查询',
-  meta: [
+  description: '在线二十四节气查询工具，查询任意年份的节气日期时间，显示当前节气和下一个节气。包含节气详解和节气歌。',
+  keywords: '二十四节气,节气查询,春分秋分,夏至冬至,中国传统节日,节气日期',
+  author: 'Util工具箱',
+  ogTitle: '二十四节气查询工具',
+  ogDescription: '查询任意年份的二十四节气日期，了解中国传统农耕文化',
+  ogType: 'website'
+})
+
+// JSON-LD 结构化数据
+useHead({
+  script: [
     {
-      name: 'description',
-      content: '在线二十四节气查询工具，查询任意年份的节气日期时间，显示当前节气和下一个节气。包含节气详解和节气歌。'
-    },
-    {
-      name: 'keywords',
-      content: '二十四节气,节气查询,春分秋分,夏至冬至,中国传统节日,节气日期'
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebApplication',
+            name: '二十四节气查询工具',
+            description: '在线查询二十四节气日期时间',
+            url: 'https://util.cn/tools/solar-term-calculator',
+            applicationCategory: 'UtilityApplication',
+            operatingSystem: 'Any',
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'CNY'
+            }
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: '首页',
+                item: 'https://util.cn'
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: '工具',
+                item: 'https://util.cn/tools'
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: '节气查询',
+                item: 'https://util.cn/tools/solar-term-calculator'
+              }
+            ]
+          }
+        ]
+      })
     }
   ]
 })
@@ -272,7 +339,23 @@ const solarTermsData = [
 
 // State
 const selectedYear = ref(new Date().getFullYear())
-const solarTerms = ref<any[]>([])
+const solarTerms = ref([])
+
+// SEO内容折叠状态
+const isSeoContentVisible = ref(true)
+
+// 图标映射
+const iconMap = {
+  Moon, Calendar, Calculator, Gift
+}
+
+// 相关工具
+const relatedTools = [
+  tools.find(t => t.id === 'lunar-calendar'),
+  tools.find(t => t.id === 'date-calculator'),
+  tools.find(t => t.id === 'quarter-calculator'),
+  tools.find(t => t.id === 'holiday-calculator')
+].filter(Boolean)
 
 // 年份列表
 const years = computed(() => {
@@ -327,6 +410,11 @@ const summerTerms = computed(() => solarTermsData.slice(8, 14))
 const autumnTerms = computed(() => solarTermsData.slice(14, 20))
 // 冬季节气
 const winterTerms = computed(() => [...solarTermsData.slice(20), ...solarTermsData.slice(0, 2)])
+
+// 切换SEO内容显示状态
+function toggleSeoContent() {
+  isSeoContentVisible.value = !isSeoContentVisible.value
+}
 
 // 初始化
 calculateSolarTerms()

@@ -224,7 +224,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useSeoMeta } from '#app'
+import { useSeoMeta, useHead } from '#app'
 import {
   Search,
   FileCode,
@@ -250,6 +250,9 @@ const scanOptions = [
 ]
 
 const selectedOptionsArray = ref(['apiKey', 'jwt', 'password', 'database'])
+
+// Convert array to Set for easier checking
+const selectedOptions = computed(() => new Set(selectedOptionsArray.value))
 
 const hasContent = computed(() => inputText.value.trim() || uploadedFile.value)
 

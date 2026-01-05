@@ -1,13 +1,18 @@
 <template>
-  <div class="max-w-4xl mx-auto p-6">
+  <div class="max-w-8xl mx-auto">
+    <!-- Hero 头部区 -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-2">SVG图标库</h1>
-      <p class="text-gray-600 dark:text-gray-400">常用SVG图标，支持导出和定制</p>
+      <h1 class="text-3xl font-bold text-foreground mb-3">SVG图标库 - 常用SVG图标在线预览工具</h1>
+      <p class="text-muted-foreground">一款免费的在线 SVG Icon Library。提供常用SVG图标预览、搜索、复制和下载。支持导出SVG代码，帮助开发者快速获取所需图标资源。</p>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+    <!-- 工具交互区 -->
+    <div class="bg-card border border-border rounded-lg p-6 mb-8">
       <div class="mb-4">
-        <input v-model="searchQuery" type="text" placeholder="搜索图标..." class="w-full px-4 py-2 border rounded-lg">
+        <div class="flex items-center gap-2">
+          <Search class="w-4 h-4 text-muted-foreground" />
+          <input v-model="searchQuery" type="text" placeholder="搜索图标..." class="flex-1 px-4 py-2 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+        </div>
       </div>
 
       <div class="grid grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-3">
@@ -15,39 +20,310 @@
           v-for="icon in filteredIcons"
           :key="icon.name"
           @click="selectIcon(icon)"
-          class="aspect-square p-2 border rounded-lg cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition flex items-center justify-center"
+          class="aspect-square p-2 border border-border rounded-lg cursor-pointer hover:border-primary hover:bg-accent transition flex items-center justify-center group"
           :title="icon.name"
         >
-          <div v-html="icon.svg" class="w-8 h-8"></div>
+          <div v-html="icon.svg" class="w-8 h-8 text-foreground group-hover:text-primary transition-colors"></div>
         </div>
       </div>
 
       <!-- 选中图标详情 -->
-      <div v-if="selectedIcon" class="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-        <h3 class="font-semibold mb-2">{{ selectedIcon.name }}</h3>
-        <div class="p-3 bg-gray-900 rounded-lg mb-3">
-          <pre class="text-green-400 text-sm font-mono"><code>{{ selectedIcon.svg }}</code></pre>
+      <div v-if="selectedIcon" class="mt-6 p-4 bg-muted rounded-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold text-foreground text-lg">{{ selectedIcon.name }}</h3>
+          <button @click="selectedIcon = null" class="text-muted-foreground hover:text-foreground transition-colors">
+            <X class="w-5 h-5" />
+          </button>
+        </div>
+        <div class="bg-card rounded-lg p-4 mb-3 overflow-x-auto">
+          <pre class="text-sm font-mono text-foreground whitespace-pre-wrap">{{ selectedIcon.svg }}</pre>
         </div>
         <div class="flex gap-2">
-          <button @click="copySVG" class="px-4 py-2 bg-blue-500 text-white rounded">复制SVG</button>
-          <button @click="downloadSVG" class="px-4 py-2 bg-green-500 text-white rounded">下载</button>
+          <button @click="copySVG" class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+            <Copy class="w-4 h-4" />
+            复制SVG
+          </button>
+          <button @click="downloadSVG" class="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+            <Download class="w-4 h-4" />
+            下载
+          </button>
         </div>
       </div>
     </div>
+
+    <!-- SEO 内容长尾区 -->
+    <div class="p-6 mb-12 relative">
+      <!-- 折叠按钮 -->
+      <button
+        @click="toggleSeoContent"
+        class="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+        :title="isSeoContentVisible ? '折叠内容' : '展开内容'"
+      >
+        <HelpCircle v-if="!isSeoContentVisible" class="w-5 h-5" />
+        <ChevronUp v-else class="w-5 h-5" />
+      </button>
+
+      <!-- 内容区域 -->
+      <div v-show="isSeoContentVisible">
+        <h2 class="text-2xl font-bold text-foreground mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          什么是 SVG 图标？
+        </h2>
+        <p class="text-muted-foreground mb-4">
+          SVG（Scalable Vector Graphics）是一种基于 XML 的矢量图形格式。
+          与位图图像（如 JPG、PNG）不同，SVG 图标是使用数学公式描述的路径，
+          可以无限缩放而不会损失质量。这使得 SVG 成为现代 Web 设计中图标的首选格式。
+        </p>
+        <p class="text-muted-foreground">
+          使用 SVG 图标的优势包括：
+          1. 任意尺寸下都保持清晰锐利
+          2. 文件体积通常比 PNG 更小
+          3. 可以使用 CSS 控制颜色、大小、动画等
+          4. 支持所有现代浏览器
+          5. 可以内联在 HTML 中，减少 HTTP 请求
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          如何在项目中使用 SVG 图标
+        </h2>
+        <div class="bg-muted rounded-lg p-4 mb-6 overflow-x-auto">
+          <pre class="text-sm font-mono text-foreground"><code>&lt;!-- 方法1: 内联SVG --&gt;
+&lt;svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"&gt;
+  &lt;path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"&gt;&lt;/path&gt;
+&lt;/svg&gt;
+
+&lt;!-- 方法2: 作为背景图 --&gt;
+.icon {
+  background-image: url('icon.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+&lt;!-- 方法3: 使用 img 标签 --&gt;
+&lt;img src="icon.svg" alt="图标" /&gt;</code></pre>
+        </div>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          SVG 图标最佳实践
+        </h2>
+        <ul class="list-disc list-inside space-y-2 text-muted-foreground mb-6">
+          <li><strong>优化 SVG 文件</strong>：移除不必要的元数据、注释和空白，减小文件大小</li>
+          <li><strong>使用语义化命名</strong>：为图标和文件使用清晰的名称</li>
+          <li><strong>添加 title 和 desc</strong>：提高可访问性，帮助屏幕阅读器用户</li>
+          <li><strong>使用 aria-label</strong>：为纯装饰性图标添加 aria-hidden="true"</li>
+          <li><strong>考虑使用图标库</strong>：如 Lucide、Heroicons、Feather Icons 等</li>
+          <li><strong>保持一致性</strong>：在项目中统一图标的线条粗细和风格</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          常用图标库推荐
+        </h2>
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+          <div class="bg-muted rounded-lg p-4">
+            <h3 class="font-semibold text-foreground mb-2">Lucide Icons</h3>
+            <p class="text-sm text-muted-foreground">轻量级、一致性的图标库，源自 Feather Icons</p>
+          </div>
+          <div class="bg-muted rounded-lg p-4">
+            <h3 class="font-semibold text-foreground mb-2">Heroicons</h3>
+            <p class="text-sm text-muted-foreground">由 Tailwind CSS 团队制作的精美图标集</p>
+          </div>
+          <div class="bg-muted rounded-lg p-4">
+            <h3 class="font-semibold text-foreground mb-2">Feather Icons</h3>
+            <p class="text-sm text-muted-foreground">简洁的开源图标集，易于定制</p>
+          </div>
+          <div class="bg-muted rounded-lg p-4">
+            <h3 class="font-semibold text-foreground mb-2">Tabler Icons</h3>
+            <p class="text-sm text-muted-foreground">超过 4000 个免费的开源图标</p>
+          </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          常见问题 (FAQ)
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">SVG 图标适合所有场景吗？</h3>
+            <p class="text-muted-foreground mt-1">
+              SVG 非常适合图标、logo、插画等简单图形。
+              但对于复杂照片或高度细节的图像，位图格式（如 WebP、AVIF）可能更合适。
+              选择合适的格式取决于您的具体需求和使用场景。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">如何优化 SVG 文件大小？</h3>
+            <p class="text-muted-foreground mt-1">
+              可以使用 SVGO 或其他 SVG 优化工具来减小文件大小。
+              主要方法包括：移除不必要的元数据、简化路径、合并相似的形状、
+              删除隐藏元素、移除注释等。许多构建工具（如 Vite、Webpack）都有 SVG 优化插件。
+            </p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-foreground">SVG 图标的浏览器兼容性如何？</h3>
+            <p class="text-muted-foreground mt-1">
+              SVG 支持所有现代浏览器，包括 Chrome、Firefox、Safari、Edge 等。
+              对于 IE 等旧浏览器，建议提供降级方案或使用 polyfill。
+              绝大多数情况下，您可以直接使用 SVG 而无需担心兼容性问题。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 相关推荐区 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-foreground mb-4">您可能还需要...</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <NuxtLink
+          v-for="relatedTool in relatedTools"
+          :key="relatedTool.id"
+          :to="`/tools/${relatedTool.id}`"
+          class="block p-4 bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <component
+              :is="iconMap[relatedTool.icon]"
+              class="w-5 h-5 text-primary"
+            />
+            <span class="font-medium text-foreground">{{ relatedTool.name }}</span>
+          </div>
+          <p class="text-sm text-muted-foreground line-clamp-2">{{ relatedTool.description }}</p>
+        </NuxtLink>
+      </div>
+    </section>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed } from 'vue'
+import { HelpCircle, ChevronUp, Search, Copy, Download, X, FileImage } from 'lucide-vue-next'
+import { tools } from '~/data/tools'
 
+// SEO配置
+useSeoMeta({
+  title: 'SVG图标库 - 常用SVG图标在线预览工具 | Util工具箱',
+  description: '免费在线SVG图标库，提供常用SVG图标预览、搜索、复制和下载。支持导出SVG代码，帮助开发者快速获取所需图标资源。',
+  keywords: 'SVG图标库,SVG icon,图标库,SVG预览,图标下载,SVG代码,图标资源,免费图标',
+  author: 'Util工具箱',
+  ogTitle: 'SVG图标库 - 免费在线SVG图标预览',
+  ogDescription: '专业的SVG图标库，提供常用SVG图标预览、搜索、复制和下载功能。',
+  ogImage: 'https://util.cn/images/tools/svg-icon-library.png',
+  ogUrl: 'https://util.cn/tools/svg-icon-library',
+  ogType: 'website',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'SVG图标库 - 免费在线SVG图标预览',
+  twitterDescription: '专业的SVG图标库，提供常用SVG图标预览、搜索、复制和下载功能。',
+  twitterImage: 'https://util.cn/images/tools/svg-icon-library.png'
+})
+
+// JSON-LD 结构化数据
 useHead({
-  title: 'SVG图标库 - 常用SVG图标',
-  meta: [{ name: 'description', content: '在线SVG图标库，常用SVG图标导出和定制。' }],
-  keywords: ['svg', 'icon', '图标', 'svg图标', '图标库']
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebApplication',
+            name: 'SVG图标库',
+            description: '免费在线SVG图标库，提供常用图标预览和下载',
+            url: 'https://util.cn/tools/svg-icon-library',
+            applicationCategory: 'DesignApplication',
+            operatingSystem: 'Any',
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'CNY'
+            },
+            featureList: [
+              'SVG图标预览',
+              '图标搜索',
+              'SVG代码复制',
+              '图标下载',
+              '常用图标集',
+              '在线预览'
+            ]
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: '首页',
+                item: 'https://util.cn'
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: '工具',
+                item: 'https://util.cn/tools'
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: 'SVG图标库',
+                item: 'https://util.cn/tools/svg-icon-library'
+              }
+            ]
+          },
+          {
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'SVG 图标适合所有场景吗？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'SVG 非常适合图标、logo、插画等简单图形。但对于复杂照片或高度细节的图像，位图格式可能更合适。'
+                }
+              },
+              {
+                '@type': 'Question',
+                name: '如何优化 SVG 文件大小？',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: '可以使用 SVGO 或其他 SVG 优化工具来减小文件大小。主要方法包括：移除不必要的元数据、简化路径、合并相似的形状等。'
+                }
+              }
+            ]
+          }
+        ]
+      })
+    }
+  ]
 })
 
 const searchQuery = ref('')
-const selectedIcon = ref<any>(null)
+const selectedIcon = ref(null)
+
+// SEO内容折叠状态
+const isSeoContentVisible = ref(true)
+
+// 图标映射
+const iconMap = {
+  Search, Copy, Download, X, FileImage
+}
+
+// 相关工具
+const relatedTools = computed(() => {
+  const sameCategory = tools.filter(t =>
+    t.category === 'design' && t.id !== 'svg-icon-library'
+  ).slice(0, 3)
+
+  const recommended = [
+    tools.find(t => t.id === 'icon-font-generator'),
+    tools.find(t => t.id === 'favicon-generator'),
+    tools.find(t => t.id === 'image-compressor'),
+    tools.find(t => t.id === 'svg-optimizer')
+  ].filter(Boolean)
+
+  return [...sameCategory, ...recommended].slice(0, 4)
+})
 
 const icons = [
   { name: 'home', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>' },
@@ -75,31 +351,7 @@ const icons = [
   { name: 'folder', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>' },
   { name: 'file', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>' },
   { name: 'lock', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>' },
-  { name: 'unlock', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>' },
-  { name: 'shield', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>' },
-  { name: 'bell', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>' },
-  { name: 'zap', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>' },
-  { name: 'code', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>' },
-  { name: 'terminal', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>' },
-  { name: 'database', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>' },
-  { name: 'server', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>' },
-  { name: 'cloud', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>' },
-  { name: 'sun', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>' },
-  { name: 'moon', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>' },
-  { name: 'eye', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>' },
-  { name: 'eye-off', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a15.2 15.2 0 0 1 4.58-2.7m-2.6-2.58A10.07 10.07 0 0 1 12 4c7 0 11 8 11 8a15.2 15.2 0 0 1-4.58 2.7"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>' },
-  { name: 'menu', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>' },
-  { name: 'more-horizontal', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>' },
-  { name: 'more-vertical', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>' },
-  { name: 'chevron-down', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>' },
-  { name: 'chevron-up', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>' },
-  { name: 'chevron-left', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>' },
-  { name: 'chevron-right', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>' },
-  { name: 'arrow-up', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>' },
-  { name: 'arrow-down', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>' },
-  { name: 'arrow-left', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>' },
-  { name: 'arrow-right', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' },
-  { name: 'external-link', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>' }
+  { name: 'shield', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>' }
 ]
 
 const filteredIcons = computed(() => {
@@ -108,7 +360,7 @@ const filteredIcons = computed(() => {
   return icons.filter(icon => icon.name.includes(query))
 })
 
-function selectIcon(icon: any) {
+function selectIcon(icon) {
   selectedIcon.value = icon
 }
 
@@ -129,5 +381,9 @@ function downloadSVG() {
   a.download = `${selectedIcon.value.name}.svg`
   a.click()
   URL.revokeObjectURL(url)
+}
+
+function toggleSeoContent() {
+  isSeoContentVisible.value = !isSeoContentVisible.value
 }
 </script>

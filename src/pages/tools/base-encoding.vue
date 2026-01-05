@@ -1,305 +1,306 @@
 <template>
-  <div class="max-w-6xl mx-auto p-6">
+  <div class="max-w-8xl mx-auto">
+    <!-- Hero 头部区 -->
     <div class="mb-8">
-      <h1 class="text-3xl font-bold mb-2">多编码转换工具</h1>
-      <p class="text-gray-600 dark:text-gray-400">支持Base32、Base58、Base62等多种编码格式的相互转换</p>
+      <h1 class="text-3xl font-bold text-foreground mb-3">多编码转换工具 - Base32/Base58/Base62编码转换</h1>
+      <p class="text-muted-foreground">支持Base32、Base58、Base62等多种编码格式的相互转换。适用于比特币地址、URL短链、OTP密钥等场景，纯本地计算，数据安全隐私。</p>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-6 mb-8">
-      <!-- Input -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-          <FileText class="w-5 h-5 text-blue-500" />
-          输入
-        </h2>
-
-        <!-- Input Encoding -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">输入编码格式</label>
-          <select v-model="inputEncoding" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
-            <option value="utf8">UTF-8 文本</option>
-            <option value="base16">Base16 (Hex)</option>
-            <option value="base32">Base32</option>
-            <option value="base58">Base58 (Bitcoin)</option>
-            <option value="base62">Base62</option>
-            <option value="base64">Base64</option>
-          </select>
-        </div>
-
-        <!-- Input Text -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">输入内容</label>
-          <textarea
-            v-model="inputText"
-            rows="8"
-            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 font-mono text-sm"
-            placeholder="输入要转换的内容..."
-          ></textarea>
-          <div class="flex justify-between mt-2">
-            <span class="text-sm text-gray-500">长度: {{ inputLength }} 字节</span>
-            <div class="flex gap-2">
-              <button
-                @click="pasteFromClipboard"
-                class="text-sm text-blue-500 hover:text-blue-700"
-              >
-                粘贴
-              </button>
-              <button
-                @click="inputText = ''; convert()"
-                class="text-sm text-red-500 hover:text-red-700"
-              >
-                清空
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Convert Button -->
-        <button
-          @click="convert"
-          :disabled="!inputText"
-          class="w-full py-3 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white font-medium rounded-lg flex items-center justify-center gap-2"
-        >
-          <RefreshCw class="w-5 h-5" />
-          转换
-        </button>
-      </div>
-
-      <!-- Output -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-        <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-          <FileOutput class="w-5 h-5 text-green-500" />
-          输出
-        </h2>
-
-        <!-- Output Encoding -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">输出编码格式</label>
-          <select v-model="outputEncoding" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
-            <option value="utf8">UTF-8 文本</option>
-            <option value="base16">Base16 (Hex)</option>
-            <option value="base32">Base32</option>
-            <option value="base58">Base58 (Bitcoin)</option>
-            <option value="base62">Base62</option>
-            <option value="base64">Base64</option>
-          </select>
-        </div>
-
-        <!-- Output Result -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium mb-2">转换结果</label>
-          <div class="relative">
-            <pre v-if="outputText" class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm font-mono break-all whitespace-pre-wrap max-h-64 overflow-y-auto">{{ outputText }}</pre>
-            <div v-else class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg text-gray-500 text-center">
-              转换结果将显示在这里
-            </div>
+    <!-- 工具交互区 -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- 输入区域 -->
+      <div class="flex flex-col h-full">
+        <div class="flex items-center justify-between mb-3">
+          <label class="text-sm font-medium text-foreground">输入</label>
+          <div class="flex gap-2">
             <button
-              v-if="outputText"
-              @click="copyResult"
-              class="absolute top-2 right-2 p-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600"
-              title="复制结果"
+              class="text-xs px-2 py-1 bg-muted hover:bg-muted/80 rounded text-muted-foreground"
+              @click="pasteFromClipboard"
             >
-              <Copy class="w-4 h-4" />
+              粘贴
+            </button>
+            <button
+              class="text-xs px-2 py-1 bg-muted hover:bg-muted/80 rounded text-muted-foreground"
+              @click="inputText = ''; convert()"
+            >
+              清空
             </button>
           </div>
-          <div class="flex justify-between mt-2">
-            <span class="text-sm text-gray-500">输出长度: {{ outputLength }} 字节</span>
+        </div>
+        <div class="mb-3">
+          <label class="text-xs text-muted-foreground">输入编码格式</label>
+          <select v-model="inputEncoding" class="w-full px-3 py-2 bg-muted border border-border rounded text-sm mt-1">
+            <option value="utf8">UTF-8 文本</option>
+            <option value="base16">Base16 (Hex)</option>
+            <option value="base32">Base32</option>
+            <option value="base58">Base58 (Bitcoin)</option>
+            <option value="base62">Base62</option>
+            <option value="base64">Base64</option>
+          </select>
+        </div>
+        <textarea
+          v-model="inputText"
+          class="flex-1 w-full min-h-[300px] p-4 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none font-mono text-sm"
+          placeholder="输入要转换的内容..."
+          @input="convert"
+        ></textarea>
+        <div class="mt-2 flex justify-between text-xs text-muted-foreground">
+          <span>长度: {{ inputLength }} 字节</span>
+        </div>
+      </div>
+
+      <!-- 输出区域 -->
+      <div class="flex flex-col h-full">
+        <div class="flex items-center justify-between mb-3">
+          <label class="text-sm font-medium text-foreground">输出</label>
+          <div class="flex gap-2">
+            <button
+              class="text-xs px-2 py-1 bg-muted hover:bg-muted/80 rounded text-muted-foreground"
+              @click="copyResult"
+            >
+              复制
+            </button>
           </div>
         </div>
-
-        <!-- Quick Convert Buttons -->
-        <div class="flex flex-wrap gap-2">
-          <button
-            v-for="enc in encodings"
-            :key="enc.value"
-            @click="outputEncoding = enc.value; convert()"
-            :class="['px-3 py-1 text-sm rounded', outputEncoding === enc.value ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-600']"
-          >
-            {{ enc.label }}
-          </button>
+        <div class="mb-3">
+          <label class="text-xs text-muted-foreground">输出编码格式</label>
+          <select v-model="outputEncoding" class="w-full px-3 py-2 bg-muted border border-border rounded text-sm mt-1">
+            <option value="utf8">UTF-8 文本</option>
+            <option value="base16">Base16 (Hex)</option>
+            <option value="base32">Base32</option>
+            <option value="base58">Base58 (Bitcoin)</option>
+            <option value="base62">Base62</option>
+            <option value="base64">Base64</option>
+          </select>
+        </div>
+        <div class="flex-1 w-full min-h-[300px] p-4 bg-muted border border-border rounded-lg overflow-auto">
+          <pre v-if="outputText" class="font-mono text-sm whitespace-pre-wrap break-all">{{ outputText }}</pre>
+          <div v-else class="text-muted-foreground text-center">转换结果将显示在这里</div>
+        </div>
+        <div class="mt-2 flex justify-between text-xs text-muted-foreground">
+          <span>输出长度: {{ outputLength }} 字节</span>
         </div>
       </div>
     </div>
 
-    <!-- Encoding Info -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-      <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-        <Info class="w-5 h-5 text-indigo-500" />
-        编码说明
-      </h2>
+    <!-- 快速转换按钮 -->
+    <div class="flex justify-center gap-2 mb-12 flex-wrap">
+      <button
+        v-for="enc in encodings"
+        :key="enc.value"
+        @click="outputEncoding = enc.value; convert()"
+        :class="['px-4 py-2 text-sm rounded', outputEncoding === enc.value ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground']"
+      >
+        转换为 {{ enc.label }}
+      </button>
+    </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <!-- Base16/Hex -->
-        <div class="border dark:border-gray-700 rounded-lg p-4">
-          <h3 class="font-medium mb-2">Base16 (Hex)</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            使用0-9和A-F表示数据，每个字节用2个字符表示
-          </p>
-          <div class="text-xs font-mono bg-gray-100 dark:bg-gray-900 p-2 rounded">
-            示例: "48656C6C6F" = "Hello"
+    <!-- SEO 内容长尾区 -->
+    <div class="p-6 mb-12 relative">
+      <!-- 折叠按钮 -->
+      <button
+        @click="toggleSeoContent"
+        class="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+        :title="isSeoContentVisible ? '折叠内容' : '展开内容'"
+      >
+        <HelpCircle v-if="!isSeoContentVisible" class="w-5 h-5" />
+        <ChevronUp v-else class="w-5 h-5" />
+      </button>
+
+      <!-- 内容区域 -->
+      <div v-show="isSeoContentVisible">
+        <h2 class="text-2xl font-bold text-foreground mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          编码说明
+        </h2>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div class="border border-border rounded-lg p-4 bg-card">
+            <h3 class="font-medium text-foreground mb-2">Base16 (Hex)</h3>
+            <p class="text-sm text-muted-foreground mb-2">使用0-9和A-F表示数据，每个字节用2个字符表示</p>
+            <div class="text-xs font-mono bg-muted p-2 rounded">示例: "48656C6C6F" = "Hello"</div>
+          </div>
+          <div class="border border-border rounded-lg p-4 bg-card">
+            <h3 class="font-medium text-foreground mb-2">Base32</h3>
+            <p class="text-sm text-muted-foreground mb-2">使用A-Z和2-7表示数据，不区分大小写，常用于OTP密钥</p>
+            <div class="text-xs font-mono bg-muted p-2 rounded">示例: "JBSWY3DPEBLW64TMMQ" = "Hello"</div>
+          </div>
+          <div class="border border-border rounded-lg p-4 bg-card">
+            <h3 class="font-medium text-foreground mb-2">Base58</h3>
+            <p class="text-sm text-muted-foreground mb-2">排除0OIl等易混淆字符，用于比特币地址</p>
+            <div class="text-xs font-mono bg-muted p-2 rounded">字符集: 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</div>
+          </div>
+          <div class="border border-border rounded-lg p-4 bg-card">
+            <h3 class="font-medium text-foreground mb-2">Base62</h3>
+            <p class="text-sm text-muted-foreground mb-2">使用0-9、A-Z、a-z，用于URL短链、ID编码</p>
+            <div class="text-xs font-mono bg-muted p-2 rounded">示例: "t8DgcJ" = 123456789</div>
+          </div>
+          <div class="border border-border rounded-lg p-4 bg-card">
+            <h3 class="font-medium text-foreground mb-2">Base64</h3>
+            <p class="text-sm text-muted-foreground mb-2">使用A-Z、a-z、0-9和+/，用于电子邮件、MIME</p>
+            <div class="text-xs font-mono bg-muted p-2 rounded">示例: "SGVsbG8=" = "Hello"</div>
+          </div>
+          <div class="border border-border rounded-lg p-4 bg-card">
+            <h3 class="font-medium text-foreground mb-2">UTF-8</h3>
+            <p class="text-sm text-muted-foreground mb-2">通用字符编码，支持多语言文本</p>
+            <div class="text-xs font-mono bg-muted p-2 rounded">示例: "你好" = E4BDA0E5A5BD</div>
           </div>
         </div>
 
-        <!-- Base32 -->
-        <div class="border dark:border-gray-700 rounded-lg p-4">
-          <h3 class="font-medium mb-2">Base32</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            使用A-Z和2-7表示数据，不区分大小写，常用于OTP密钥
-          </p>
-          <div class="text-xs font-mono bg-gray-100 dark:bg-gray-900 p-2 rounded">
-            示例: "JBSWY3DPEBLW64TMMQ" = "Hello"
+        <h2 class="text-2xl font-bold text-foreground mt-8 mb-4 flex items-center">
+          <span class="text-primary mr-2">#</span>
+          应用场景
+        </h2>
+        <div class="grid md:grid-cols-2 gap-4 text-sm text-muted-foreground mb-6">
+          <div>
+            <h3 class="font-medium text-foreground mb-2">Base16/Hex</h3>
+            <ul class="list-disc list-inside space-y-1">
+              <li>显示二进制数据</li>
+              <li>颜色值 (RGB)</li>
+              <li>MAC地址</li>
+              <li>内存地址</li>
+            </ul>
           </div>
-        </div>
-
-        <!-- Base58 -->
-        <div class="border dark:border-gray-700 rounded-lg p-4">
-          <h3 class="font-medium mb-2">Base58</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            排除0OIl等易混淆字符，用于比特币地址
-          </p>
-          <div class="text-xs font-mono bg-gray-100 dark:bg-gray-900 p-2 rounded">
-            字符集: 123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz
+          <div>
+            <h3 class="font-medium text-foreground mb-2">Base32</h3>
+            <ul class="list-disc list-inside space-y-1">
+              <li>TOTP/HOTP密钥</li>
+              <li>Google Authenticator</li>
+              <li>DNSSEC</li>
+              <li>不区分大小写的场景</li>
+            </ul>
           </div>
-        </div>
-
-        <!-- Base62 -->
-        <div class="border dark:border-gray-700 rounded-lg p-4">
-          <h3 class="font-medium mb-2">Base62</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            使用0-9、A-Z、a-z，用于URL短链、ID编码
-          </p>
-          <div class="text-xs font-mono bg-gray-100 dark:bg-gray-900 p-2 rounded">
-            示例: "t8DgcJ" = 123456789
+          <div>
+            <h3 class="font-medium text-foreground mb-2">Base58</h3>
+            <ul class="list-disc list-inside space-y-1">
+              <li>比特币地址</li>
+              <li>IPFS CID</li>
+              <li>避免视觉混淆</li>
+            </ul>
           </div>
-        </div>
-
-        <!-- Base64 -->
-        <div class="border dark:border-gray-700 rounded-lg p-4">
-          <h3 class="font-medium mb-2">Base64</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            使用A-Z、a-z、0-9和+/，用于电子邮件、MIME
-          </p>
-          <div class="text-xs font-mono bg-gray-100 dark:bg-gray-900 p-2 rounded">
-            示例: "SGVsbG8=" = "Hello"
-          </div>
-        </div>
-
-        <!-- UTF-8 -->
-        <div class="border dark:border-gray-700 rounded-lg p-4">
-          <h3 class="font-medium mb-2">UTF-8</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            通用字符编码，支持多语言文本
-          </p>
-          <div class="text-xs font-mono bg-gray-100 dark:bg-gray-900 p-2 rounded">
-            示例: "你好" = E4BDA0E5A5BD
+          <div>
+            <h3 class="font-medium text-foreground mb-2">Base62</h3>
+            <ul class="list-disc list-inside space-y-1">
+              <li>URL短链</li>
+              <li>YouTube视频ID</li>
+              <li>数据库ID编码</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Use Cases -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-      <h2 class="text-xl font-semibold mb-4">应用场景</h2>
-      <div class="grid md:grid-cols-2 gap-4 text-sm">
-        <div>
-          <h3 class="font-medium mb-2">Base16/Hex</h3>
-          <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-            <li>显示二进制数据</li>
-            <li>颜色值 (RGB)</li>
-            <li>MAC地址</li>
-            <li>内存地址</li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="font-medium mb-2">Base32</h3>
-          <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-            <li>TOTP/HOTP密钥</li>
-            <li>Google Authenticator</li>
-            <li>DNSSEC</li>
-            <li>不区分大小写的场景</li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="font-medium mb-2">Base58</h3>
-          <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-            <li>比特币地址</li>
-            <li>IPFS CID</li>
-            <li>避免视觉混淆</li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="font-medium mb-2">Base62</h3>
-          <ul class="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-1">
-            <li>URL短链</li>
-            <li>YouTube视频ID</li>
-            <li>数据库ID编码</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Related Tools -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-      <h2 class="text-xl font-semibold mb-4">相关工具</h2>
-      <div class="grid md:grid-cols-4 gap-4">
-        <NuxtLink to="/tools/base64-encode" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Hash class="w-8 h-8 text-blue-500 mb-2" />
-          <h3 class="font-medium">Base64编码</h3>
-          <p class="text-sm text-gray-500">Base64编码/解码</p>
-        </NuxtLink>
-        <NuxtLink to="/tools/hex-convert" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Hash class="w-8 h-8 text-green-500 mb-2" />
-          <h3 class="font-medium">十六进制</h3>
-          <p class="text-sm text-gray-500">Hex转换</p>
-        </NuxtLink>
-        <NuxtLink to="/tools/url-encode" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Link class="w-8 h-8 text-purple-500 mb-2" />
-          <h3 class="font-medium">URL编码</h3>
-          <p class="text-sm text-gray-500">URL编码/解码</p>
-        </NuxtLink>
-        <NuxtLink to="/tools/otp-generator" class="p-4 border dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-          <Clock class="w-8 h-8 text-red-500 mb-2" />
-          <h3 class="font-medium">OTP生成器</h3>
-          <p class="text-sm text-gray-500">动态口令</p>
+    <!-- 相关推荐区 -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-foreground mb-4">您可能还需要...</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <NuxtLink
+          v-for="relatedTool in relatedTools"
+          :key="relatedTool.id"
+          :to="`/tools/${relatedTool.id}`"
+          class="block p-4 bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+        >
+          <div class="flex items-center gap-2 mb-2">
+            <component
+              :is="iconMap[relatedTool.icon]"
+              class="w-5 h-5 text-primary"
+            />
+            <span class="font-medium text-foreground">{{ relatedTool.name }}</span>
+          </div>
+          <p class="text-sm text-muted-foreground line-clamp-2">{{ relatedTool.description }}</p>
         </NuxtLink>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, computed } from 'vue'
-import {
-  FileText,
-  FileOutput,
-  RefreshCw,
-  Copy,
-  Info,
-  Hash,
-  Link,
-  Clock
-} from 'lucide-vue-next'
+import { HelpCircle, ChevronUp } from 'lucide-vue-next'
+import { tools } from '~/data/tools'
+import { addRecentTool } from '~/composables/useTools'
 
 // SEO配置
+useSeoMeta({
+  title: '多编码转换工具 - 在线Base32/Base58/Base62编码转换 | Util工具箱',
+  description: '在线多编码转换工具，支持Base32、Base58、Base62与Hex、Base64、UTF-8等多种编码格式互转。适用于比特币地址、URL短链、OTP密钥等场景，纯前端处理。',
+  keywords: 'Base32编码,Base58编码,Base62编码,编码转换,比特币编码,URL短链,在线编码工具,Base58解码',
+  author: 'Util工具箱',
+  ogTitle: '多编码转换工具 - Base32/Base58/Base62',
+  ogDescription: '支持Base32、Base58、Base62等多种编码格式的相互转换',
+  ogType: 'website'
+})
+
+// JSON-LD 结构化数据
 useHead({
-  title: '多编码转换工具 - 在线Base32/Base58/Base62编码转换',
-  meta: [
+  script: [
     {
-      name: 'description',
-      content: '在线多编码转换工具，支持Base32、Base58、Base62与Hex、Base64、UTF-8等多种编码格式互转。适用于比特币地址、URL短链、OTP密钥等场景。'
-    },
-    {
-      name: 'keywords',
-      content: 'Base32编码,Base58编码,Base62编码,编码转换,比特币编码,URL短链,在线编码工具,Base58解码'
+      type: 'application/ld+json',
+      children: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'WebApplication',
+            name: '多编码转换工具',
+            description: '在线Base32/Base58/Base62编码转换工具',
+            url: 'https://util.cn/tools/base-encoding',
+            applicationCategory: 'DeveloperApplication',
+            operatingSystem: 'Any',
+            offers: {
+              '@type': 'Offer',
+              price: '0',
+              priceCurrency: 'CNY'
+            },
+            featureList: [
+              'Base32编码转换',
+              'Base58编码转换',
+              'Base62编码转换',
+              'Base16/Hex转换',
+              'Base64编码转换',
+              'UTF-8文本转换',
+              '批量转换'
+            ]
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: '首页',
+                item: 'https://util.cn'
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: '工具',
+                item: 'https://util.cn/tools'
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: '多编码转换',
+                item: 'https://util.cn/tools/base-encoding'
+              }
+            ]
+          }
+        ]
+      })
     }
   ]
 })
+
+// 定义当前工具
+const tool = tools.find(t => t.id === 'base-encoding')
 
 // State
 const inputEncoding = ref('utf8')
 const outputEncoding = ref('base64')
 const inputText = ref('')
 const outputText = ref('')
+
+// SEO内容折叠状态
+const isSeoContentVisible = ref(true)
 
 // Encodings list
 const encodings = [
@@ -320,6 +321,25 @@ const BASE58_CHARS = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz
 // Base62 charset
 const BASE62_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
+// 图标映射
+const iconMap = {
+  Hash: computed(() => Hash),
+  Link: computed(() => Link),
+  Clock: computed(() => Clock)
+}
+
+// 相关工具
+const relatedTools = computed(() => {
+  const recommended = [
+    tools.find(t => t.id === 'base64-encode'),
+    tools.find(t => t.id === 'hex-convert'),
+    tools.find(t => t.id === 'url-encode'),
+    tools.find(t => t.id === 'otp-generator')
+  ].filter(Boolean)
+
+  return recommended.slice(0, 4)
+})
+
 // Computed
 const inputLength = computed(() => {
   if (!inputText.value) return 0
@@ -337,7 +357,7 @@ const outputLength = computed(() => {
 })
 
 // Decode input to bytes based on encoding
-function decodeToBytes(input: string, encoding: string): Uint8Array {
+function decodeToBytes(input, encoding) {
   if (!input) return new Uint8Array(0)
 
   switch (encoding) {
@@ -374,7 +394,7 @@ function decodeToBytes(input: string, encoding: string): Uint8Array {
 }
 
 // Encode bytes to output based on encoding
-function encodeFromBytes(bytes: Uint8Array, encoding: string): string {
+function encodeFromBytes(bytes, encoding) {
   switch (encoding) {
     case 'utf8':
       return new TextDecoder().decode(bytes)
@@ -403,7 +423,7 @@ function encodeFromBytes(bytes: Uint8Array, encoding: string): string {
 }
 
 // Base32 encode
-function base32Encode(buffer: Uint8Array): string {
+function base32Encode(buffer) {
   let bits = 0
   let value = 0
   let output = ''
@@ -426,7 +446,7 @@ function base32Encode(buffer: Uint8Array): string {
 }
 
 // Base32 decode
-function base32Decode(input: string): Uint8Array {
+function base32Decode(input) {
   const cleanInput = input.toUpperCase().replace(/[^A-Z2-7]/g, '')
   const output = new Uint8Array((Math.ceil(cleanInput.length * 5 / 8)))
 
@@ -451,7 +471,7 @@ function base32Decode(input: string): Uint8Array {
 }
 
 // Base58 encode (Bitcoin style)
-function base58Encode(buffer: Uint8Array): string {
+function base58Encode(buffer) {
   const digits = [0]
   for (let i = 0; i < buffer.length; i++) {
     let carry = buffer[i]
@@ -479,7 +499,7 @@ function base58Encode(buffer: Uint8Array): string {
 }
 
 // Base58 decode
-function base58Decode(input: string): Uint8Array {
+function base58Decode(input) {
   const cleanInput = input.replace(/[^1-9A-HJ-NP-Za-km-z]/g, '')
   const bytes = [0]
 
@@ -513,7 +533,7 @@ function base58Decode(input: string): Uint8Array {
 }
 
 // Base62 encode
-function base62Encode(buffer: Uint8Array): string {
+function base62Encode(buffer) {
   const digits = [0]
   for (let i = 0; i < buffer.length; i++) {
     let carry = buffer[i]
@@ -541,7 +561,7 @@ function base62Encode(buffer: Uint8Array): string {
 }
 
 // Base62 decode
-function base62Decode(input: string): Uint8Array {
+function base62Decode(input) {
   const cleanInput = input.replace(/[^0-9A-Za-z]/g, '')
   const bytes = [0]
 
@@ -584,7 +604,7 @@ function convert() {
   try {
     const bytes = decodeToBytes(inputText.value, inputEncoding.value)
     outputText.value = encodeFromBytes(bytes, outputEncoding.value)
-  } catch (e: any) {
+  } catch (e) {
     outputText.value = '转换失败: ' + e.message
   }
 }
@@ -602,6 +622,17 @@ async function pasteFromClipboard() {
 
 // Copy result
 function copyResult() {
+  if (!outputText.value) return
   navigator.clipboard.writeText(outputText.value)
+}
+
+// 切换SEO内容显示状态
+function toggleSeoContent() {
+  isSeoContentVisible.value = !isSeoContentVisible.value
+}
+
+// 添加到最近使用
+if (tool) {
+  addRecentTool(tool.id)
 }
 </script>
